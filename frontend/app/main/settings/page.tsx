@@ -53,21 +53,21 @@ function SectionCard({
   eyebrow: string; badge?: React.ReactNode; children: React.ReactNode;
 }) {
   return (
-    <div className="panel-soft rounded-[30px] p-5 sm:p-6">
-      <div className="flex items-start gap-4 border-b border-white/8 pb-5">
-        <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl border border-brand-400/20 bg-brand-400/10">
-          <Icon className="h-6 w-6 text-brand-300" />
+    <div className="panel-soft rounded-xl p-3 sm:p-4">
+      <div className="flex items-start gap-2 border-b border-white/8 pb-3">
+        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl border border-brand-400/20 bg-brand-400/10">
+          <Icon className="h-3.5 w-3.5 text-brand-300" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <p className="text-xs uppercase tracking-[0.22em] text-slate-500">{eyebrow}</p>
             {badge}
           </div>
-          <h2 className="mt-1 text-xl font-semibold text-white">{title}</h2>
-          <p className="mt-1 text-sm text-slate-400">{subtitle}</p>
+          <h2 className="mt-1 text-sm font-semibold text-white">{title}</h2>
+          <p className="mt-1 text-[11px] leading-4 text-slate-400">{subtitle}</p>
         </div>
       </div>
-      <div className="mt-5 space-y-4">{children}</div>
+      <div className="mt-2 space-y-3">{children}</div>
     </div>
   );
 }
@@ -75,9 +75,9 @@ function SectionCard({
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="mb-2 block text-sm font-semibold text-white">{label}</label>
+      <label className="mb-2 block text-xs font-semibold text-white">{label}</label>
       {children}
-      {hint && <p className="mt-1.5 text-xs leading-5 text-slate-500">{hint}</p>}
+      {hint && <p className="mt-1.5 text-xs leading-4 text-slate-500">{hint}</p>}
     </div>
   );
 }
@@ -92,7 +92,7 @@ function LiveBadge({ value, label }: { value: string; label?: string }) {
 }
 
 const inputCls =
-  "w-full rounded-[16px] border border-white/10 bg-slate-950/50 px-4 py-3 text-sm text-white placeholder-slate-600 outline-none transition-colors focus:border-brand-500/50 focus:ring-2 focus:ring-brand-500/20";
+  "w-full rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-2 text-sm text-white placeholder-slate-600 outline-none transition-colors focus:border-brand-500/50 focus:ring-2 focus:ring-brand-500/20";
 
 const numInputCls =
   inputCls + " [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
@@ -236,20 +236,18 @@ export default function SettingsPage() {
      Render
   ══════════════════════════════════════════════════════════════════ */
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
 
       {/* ── 頁首 ─────────────────────────────────────────────────── */}
-      <section className="panel-grid overflow-hidden rounded-[32px] p-6 sm:p-7 lg:p-8">
-        <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+      <section className="panel-grid overflow-hidden rounded-2xl p-3 sm:p-4">
+        <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="section-kicker">System Config</div>
-            <h1 className="display-title mt-4 text-3xl leading-tight sm:text-[40px]">系統設定</h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-              設定 OCR 引擎、向量嵌入模型、語言模型端點與 RAG 推論參數。
-              修改後點擊「儲存設定」即時生效，<strong className="text-white">不需重啟服務</strong>。
-            </p>
+            <div className="flex items-center gap-2.5 mb-2">
+              <div className="section-kicker">System Config</div>
+              <h2 className="text-sm font-semibold text-white">系統設定</h2>
+            </div>
             {dirty && (
-              <div className="mt-3 flex items-center gap-2 text-amber-400">
+              <div className="mt-2 flex items-center gap-2 text-amber-400">
                 <AlertCircle className="h-4 w-4" />
                 <span className="text-sm">有未儲存的變更</span>
               </div>
@@ -269,15 +267,15 @@ export default function SettingsPage() {
       </section>
 
       {/* ── 設定生效說明 ──────────────────────────────────────────── */}
-      <div className="flex items-start gap-3 rounded-[20px] border border-sky-500/20 bg-sky-500/8 px-4 py-3">
+      <div className="flex items-start gap-3 rounded-xl border border-sky-500/20 bg-sky-500/8 px-4 py-3">
         <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-sky-400" />
-        <p className="text-xs leading-5 text-sky-300">
+        <p className="text-[11px] leading-4 text-sky-300">
           設定儲存後會<strong> 即時套用</strong>到 embedding 和 RAG 服務（修改 in-memory config）。
           重啟 backend 容器後，DB 中的設定值會自動重新載入並覆蓋 env var 預設值。
         </p>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="grid gap-3 xl:grid-cols-2">
 
         {/* ── OCR 引擎設定 ────────────────────────────────────────── */}
         <SectionCard
@@ -293,7 +291,7 @@ export default function SettingsPage() {
                 <button
                   key={engine}
                   onClick={() => set("ocr_engine", engine)}
-                  className={`flex-1 rounded-[16px] border py-3 text-sm font-semibold transition-colors ${
+                  className={`flex-1 rounded-2xl border py-2 text-sm font-semibold transition-colors ${
                     settings.ocr_engine === engine
                       ? "border-brand-500/50 bg-brand-500/20 text-white"
                       : "border-white/10 bg-white/[0.04] text-slate-400 hover:border-white/20 hover:text-white"
@@ -305,10 +303,10 @@ export default function SettingsPage() {
             </div>
           </Field>
           {settings.ocr_engine === "vlm" && (
-            <div className="rounded-[20px] border border-emerald-400/15 bg-emerald-400/8 p-4">
+            <div className="rounded-xl border border-emerald-400/15 bg-emerald-400/8 p-3">
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-300" />
-                <p className="text-xs leading-5 text-slate-400">
+                <p className="text-[11px] leading-4 text-slate-400">
                   透過 Ollama 本地推論進行圖片文字辨識，完全離線。
                   上傳圖片時自動呼叫視覺模型提取文字後嵌入知識庫。
                 </p>
@@ -443,16 +441,16 @@ export default function SettingsPage() {
           </Field>
 
           {/* 參數預覽 */}
-          <div className="rounded-[20px] border border-white/8 bg-slate-950/40 p-4">
+          <div className="rounded-xl border border-white/8 bg-slate-950/40 p-3">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">目前參數預覽</p>
-            <div className="mt-3 grid grid-cols-3 gap-3">
+            <div className="mt-2 grid grid-cols-3 gap-3">
               {[
                 { label: "切片大小", value: settings.chunk_size,   unit: "chars" },
                 { label: "重疊長度", value: settings.chunk_overlap, unit: "chars" },
                 { label: "Top K",   value: settings.rag_top_k,     unit: "段" },
               ].map(({ label, value, unit }) => (
                 <div key={label} className="text-center">
-                  <p className="font-display text-2xl font-semibold text-white">{value}</p>
+                  <p className="font-display text-sm font-semibold text-white">{value}</p>
                   <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-slate-500">{unit}</p>
                   <p className="text-xs text-slate-400">{label}</p>
                 </div>
@@ -463,22 +461,22 @@ export default function SettingsPage() {
       </div>
 
       {/* ── 目前生效設定摘要 ─────────────────────────────────────────── */}
-      <div className="panel-soft rounded-[28px] p-5">
-        <div className="flex items-center gap-2 border-b border-white/8 pb-4">
+      <div className="panel-soft rounded-xl p-3">
+        <div className="flex items-center gap-2 border-b border-white/8 pb-3">
           <Database className="h-4 w-4 text-slate-400" />
-          <p className="text-sm font-semibold text-white">目前生效設定</p>
+          <p className="text-xs font-semibold text-white">目前生效設定</p>
           <span className="ml-auto text-[10px] text-slate-500">儲存後即時更新</span>
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
           {[
             { label: "Embed 模型",  value: settings.embed_model_name || "nomic-embed-text" },
             { label: "LLM 模型",    value: settings.llm_model_name   || "gemma4:e4b" },
             { label: "OCR 引擎",    value: settings.ocr_engine },
             { label: "Top K",       value: String(settings.rag_top_k) },
           ].map(({ label, value }) => (
-            <div key={label} className="rounded-[16px] border border-white/8 bg-white/[0.02] px-3 py-2.5">
+            <div key={label} className="rounded-2xl border border-white/8 bg-white/[0.02] px-3 py-2">
               <p className="text-[10px] uppercase tracking-[0.18em] text-slate-500">{label}</p>
-              <p className="mt-1 truncate text-sm font-semibold text-emerald-300">{value}</p>
+              <p className="mt-1 truncate text-xs font-semibold text-emerald-300">{value}</p>
             </div>
           ))}
         </div>
@@ -486,8 +484,8 @@ export default function SettingsPage() {
 
       {/* ── 底部儲存列 ───────────────────────────────────────────────── */}
       <div className="sticky bottom-4 z-20">
-        <div className="mx-auto max-w-lg rounded-[24px] border border-white/10 bg-slate-900/90 px-6 py-4 shadow-2xl backdrop-blur-xl">
-          <div className="flex items-center justify-between gap-4">
+        <div className="mx-auto max-w-lg rounded-2xl border border-white/10 bg-slate-900/90 px-6 py-3 shadow-2xl backdrop-blur-xl">
+          <div className="flex items-center justify-between gap-3">
             <p className={`text-sm ${dirty ? "text-amber-400" : "text-slate-400"}`}>
               {dirty ? "⚠ 有未儲存的變更" : "修改後點擊儲存，設定即時套用至後端。"}
             </p>

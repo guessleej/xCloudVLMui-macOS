@@ -110,9 +110,9 @@ function StatCard({ label, value, sub, accent }: {
   label: string; value: string | number; sub?: string; accent?: string;
 }) {
   return (
-    <div className="rounded-[20px] border border-white/10 bg-white/[0.04] p-4">
+    <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
       <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">{label}</p>
-      <p className={`mt-2 font-display text-2xl font-semibold ${accent ?? "text-white"}`}>{value}</p>
+      <p className={`mt-2 font-display text-sm font-semibold ${accent ?? "text-white"}`}>{value}</p>
       {sub && <p className="mt-1 text-xs text-slate-500">{sub}</p>}
     </div>
   );
@@ -373,18 +373,18 @@ export default function FactoryEventsPage() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-3">
 
       {/* ── Header ─────────────────────────────────────────────── */}
-      <section className="panel-grid overflow-hidden rounded-[28px] px-5 py-4 sm:px-6">
-        <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-brand-500/30 bg-brand-500/15">
-              <AlertTriangle className="h-5 w-5 text-brand-300" />
+      <section className="panel-grid overflow-hidden rounded-2xl px-3 py-2 sm:px-4">
+        <div className="relative z-10 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl border border-brand-500/30 bg-brand-500/15">
+              <AlertTriangle className="h-3.5 w-3.5 text-brand-300" />
             </div>
             <div>
               <div className="section-kicker">Factory Events</div>
-              <h1 className="display-title mt-0.5 text-xl sm:text-2xl">工廠事件</h1>
+              <h1 className="display-title mt-1 text-sm font-semibold">工廠事件</h1>
             </div>
             {stats && (
               <div className="hidden items-center gap-2 xl:flex">
@@ -419,7 +419,7 @@ export default function FactoryEventsPage() {
 
         {/* Stats bar */}
         {stats && (
-          <div className="relative z-10 mt-4 grid grid-cols-2 gap-3 border-t border-white/8 pt-4 sm:grid-cols-4">
+          <div className="relative z-10 mt-2 grid grid-cols-2 gap-2 border-t border-white/8 pt-3 sm:grid-cols-4">
             <StatCard
               label="事件總數"
               value={stats.total.toLocaleString()}
@@ -448,7 +448,7 @@ export default function FactoryEventsPage() {
       </section>
 
       {/* ── Filter Bar ──────────────────────────────────────────── */}
-      <section className="panel-soft rounded-[24px] px-4 py-4">
+      <section className="panel-soft rounded-xl px-3 py-3">
         <div className="flex flex-wrap items-center gap-3">
 
           {/* Search */}
@@ -541,7 +541,7 @@ export default function FactoryEventsPage() {
                 <button
                   key={type}
                   onClick={() => setEventType(eventType === type ? "ALL" : type)}
-                  className={`rounded-[16px] border px-3 py-2.5 text-left transition-all ${
+                  className={`rounded-xl border px-3 py-2.5 text-left transition-all ${
                     eventType === type
                       ? "border-brand-500/40 bg-brand-500/10"
                       : "border-white/8 bg-white/[0.025] hover:bg-white/[0.05]"
@@ -558,7 +558,7 @@ export default function FactoryEventsPage() {
 
       {/* ── Event List ───────────────────────────────────────── */}
       <section>
-        <div className="mb-3 flex items-center justify-between px-1">
+        <div className="mb-2 flex items-center justify-between px-1">
           <h2 className="text-sm font-semibold text-white">
             事件列表
             <span className="ml-2 text-xs font-normal text-slate-500">
@@ -568,13 +568,13 @@ export default function FactoryEventsPage() {
         </div>
 
         {loading && events.length === 0 ? (
-          <div className="panel-soft flex items-center justify-center rounded-[28px] py-20">
+          <div className="panel-soft flex items-center justify-center rounded-2xl py-20">
             <Loader2 className="h-8 w-8 animate-spin text-slate-500" />
           </div>
         ) : events.length === 0 ? (
-          <div className="panel-soft flex flex-col items-center rounded-[28px] py-16 text-center">
+          <div className="panel-soft flex flex-col items-center rounded-2xl py-16 text-center">
             <Info className="h-10 w-10 text-slate-600" />
-            <p className="mt-4 text-base font-semibold text-white">暫無事件記錄</p>
+            <p className="mt-2 text-base font-semibold text-white">暫無事件記錄</p>
             <p className="mt-2 text-sm text-slate-500">目前沒有符合篩選條件的事件，系統持續自動偵測中</p>
           </div>
         ) : (

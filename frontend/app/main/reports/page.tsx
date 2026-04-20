@@ -113,21 +113,17 @@ export default function ReportsPage() {
   const criticalCount = reports.filter((report) => report.risk_level === "critical").length;
 
   return (
-    <div className="space-y-6">
-      <section className="panel-grid overflow-hidden rounded-[32px] p-6 sm:p-7 lg:p-8">
-        <div className="relative z-10 grid gap-6 xl:grid-cols-[1.15fr_0.95fr]">
+    <div className="space-y-3">
+      <section className="panel-grid overflow-hidden rounded-2xl p-3 sm:p-4">
+        <div className="relative z-10 grid gap-3 xl:grid-cols-[1.15fr_0.95fr]">
           <div>
-            <div className="section-kicker">Report Workspace</div>
-            <h1 className="display-title mt-4 text-3xl leading-tight sm:text-[40px]">
-              維護報告工作區
-            </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-              將巡檢結果、風險層級與建議行動整理成可下載、可交付的維護文件，便於回報、
-              留檔與後續工單串接。
-            </p>
+            <div className="flex items-center gap-2.5 mb-2">
+              <div className="section-kicker">Report Workspace</div>
+              <h2 className="text-sm font-semibold text-white">維護報告工作區</h2>
+            </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-2 sm:grid-cols-3">
             <TopStat label="報告總數" value={`${reports.length}`} detail="歷史與最新報告" />
             <TopStat label="危急件數" value={`${criticalCount}`} detail="需立即處置" />
             <TopStat
@@ -139,12 +135,12 @@ export default function ReportsPage() {
         </div>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[0.8fr_1.35fr_0.65fr]">
-        <div className="panel-soft flex min-h-[860px] flex-col rounded-[30px] p-5 sm:p-6">
-          <div className="flex items-start justify-between gap-3 border-b border-white/8 pb-5">
+      <section className="grid gap-3 xl:grid-cols-[0.8fr_1.35fr_0.65fr]">
+        <div className="panel-soft flex min-h-[860px] flex-col rounded-xl p-3 sm:p-4">
+          <div className="flex items-start justify-between gap-3 border-b border-white/8 pb-3">
             <div>
               <div className="section-kicker">Report Library</div>
-              <h2 className="mt-3 text-2xl font-semibold text-white">報告列表</h2>
+              <h2 className="mt-1 text-sm font-semibold text-white">報告列表</h2>
             </div>
             <button onClick={fetchReports} disabled={loading} className="secondary-button px-3 py-2 text-xs">
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -152,7 +148,7 @@ export default function ReportsPage() {
             </button>
           </div>
 
-          <div className="mt-5">
+          <div className="mt-3">
             <div className="relative">
               <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
               <input
@@ -163,7 +159,7 @@ export default function ReportsPage() {
               />
             </div>
 
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-2 flex flex-wrap gap-2">
               {RISK_OPTIONS.map((option) => (
                 <button
                   key={option.value}
@@ -183,7 +179,7 @@ export default function ReportsPage() {
             </div>
           </div>
 
-          <div className="mt-5 flex-1 space-y-3 overflow-y-auto pr-1">
+          <div className="mt-3 flex-1 space-y-3 overflow-y-auto pr-1">
             {loading && filteredReports.length === 0 ? (
               <EmptyLibrary title="讀取報告中..." />
             ) : filteredReports.length === 0 ? (
@@ -196,7 +192,7 @@ export default function ReportsPage() {
                   <button
                     key={report.id}
                     onClick={() => setSelected(report)}
-                    className={`w-full rounded-[24px] border p-4 text-left transition-all ${
+                    className={`w-full rounded-xl border p-3 text-left transition-all ${
                       isActive
                         ? "border-accent-400/25 bg-accent-400/10 shadow-glow"
                         : "border-white/8 bg-white/[0.04] hover:border-white/15 hover:bg-white/[0.06]"
@@ -206,11 +202,11 @@ export default function ReportsPage() {
                       <span className={level.badge}>{level.label}</span>
                       <span className="table-chip">{report.source}</span>
                     </div>
-                    <h3 className="mt-3 text-base font-semibold text-white">{report.title}</h3>
-                    <p className="mt-2 text-sm text-slate-400">
+                    <h3 className="mt-2 text-base font-semibold text-white">{report.title}</h3>
+                    <p className="mt-1 text-sm text-slate-400">
                       {report.equipment_name ?? "未指定設備"}
                     </p>
-                    <div className="mt-4 flex items-center gap-2 text-xs text-slate-500">
+                    <div className="mt-2 flex items-center gap-2 text-xs text-slate-500">
                       <CalendarClock className="h-3.5 w-3.5" />
                       {new Date(report.created_at).toLocaleString("zh-TW")}
                     </div>
@@ -221,14 +217,14 @@ export default function ReportsPage() {
           </div>
         </div>
 
-        <div className="panel-soft flex min-h-[860px] flex-col rounded-[30px] p-5 sm:p-6">
+        <div className="panel-soft flex min-h-[860px] flex-col rounded-xl p-3 sm:p-4">
           {selected ? (
             <>
-              <div className="flex flex-col gap-4 border-b border-white/8 pb-5 sm:flex-row sm:items-start sm:justify-between">
+              <div className="flex flex-col gap-2 border-b border-white/8 pb-3 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                   <div className="section-kicker">Report Preview</div>
-                  <h2 className="mt-3 text-2xl font-semibold text-white">{selected.title}</h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-400">
+                  <h2 className="mt-1 text-sm font-semibold text-white">{selected.title}</h2>
+                  <p className="mt-1 text-[11px] leading-4 text-slate-400">
                     {selected.equipment_name ?? "未指定設備"} · 建立於{" "}
                     {new Date(selected.created_at).toLocaleString("zh-TW")}
                   </p>
@@ -246,7 +242,7 @@ export default function ReportsPage() {
                 </div>
               </div>
 
-              <div className="mt-5 flex-1 overflow-y-auto rounded-[28px] border border-white/8 bg-slate-950/35 p-5 sm:p-6">
+              <div className="mt-3 flex-1 overflow-y-auto rounded-xl border border-white/8 bg-slate-950/35 p-3 sm:p-4">
                 <div className="markdown-body">
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {selected.markdown_content ?? "_此報告無內容_"}
@@ -256,23 +252,23 @@ export default function ReportsPage() {
             </>
           ) : (
             <div className="flex flex-1 flex-col items-center justify-center text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
+              <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
                 <FileText className="h-6 w-6 text-slate-400" />
               </div>
-              <h2 className="mt-4 text-xl font-semibold text-white">請選擇一份報告</h2>
-              <p className="mt-2 max-w-md text-sm leading-6 text-slate-400">
+              <h2 className="mt-2 text-sm font-semibold text-white">請選擇一份報告</h2>
+              <p className="mt-1 max-w-md text-[11px] leading-4 text-slate-400">
                 你可以從左側報告庫切換不同巡檢結果，檢視內容並下載交付。
               </p>
             </div>
           )}
         </div>
 
-        <div className="panel-soft min-h-[860px] rounded-[30px] p-5 sm:p-6">
+        <div className="panel-soft min-h-[860px] rounded-xl p-3 sm:p-4">
           <div className="section-kicker">Inspector</div>
-          <h2 className="mt-3 text-2xl font-semibold text-white">報告資訊</h2>
+          <h2 className="mt-1 text-sm font-semibold text-white">報告資訊</h2>
 
           {selected ? (
-            <div className="mt-5 space-y-4">
+            <div className="mt-3 space-y-3">
               <MetaCard label="風險等級" value={LEVEL_MAP[selected.risk_level]?.label ?? selected.risk_level} badge={LEVEL_MAP[selected.risk_level]?.badge} />
               <MetaCard label="資料來源" value={selected.source} />
               <MetaCard label="設備名稱" value={selected.equipment_name ?? "未指定"} />
@@ -282,17 +278,17 @@ export default function ReportsPage() {
                 value={new Date(selected.created_at).toLocaleString("zh-TW")}
               />
 
-              <div className="rounded-[24px] border border-white/8 bg-slate-950/30 p-4">
+              <div className="rounded-xl border border-white/8 bg-slate-950/30 p-3">
                 <p className="text-[11px] uppercase tracking-[0.22em] text-slate-500">交付提示</p>
-                <p className="mt-3 text-sm leading-6 text-slate-300">
+                <p className="mt-2 text-[11px] leading-4 text-slate-300">
                   若這份報告屬於危急或升高等級，建議同步輸出給 EAM 工單系統與 LINE
                   推播；若屬預防性巡檢，則可納入下次保養排程。
                 </p>
               </div>
             </div>
           ) : (
-            <div className="mt-5 rounded-[24px] border border-dashed border-white/12 bg-slate-950/20 px-4 py-6">
-              <p className="text-sm leading-6 text-slate-400">
+            <div className="mt-3 rounded-xl border border-dashed border-white/12 bg-slate-950/20 px-3 pb-3 py-3">
+              <p className="text-[11px] leading-4 text-slate-400">
                 選取報告後，這裡會顯示風險層級、設備資訊與交付建議。
               </p>
             </div>
@@ -313,10 +309,10 @@ function TopStat({
   detail: string;
 }) {
   return (
-    <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-5">
+    <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
       <p className="text-xs uppercase tracking-[0.22em] text-slate-500">{label}</p>
-      <p className="mt-3 font-display text-3xl font-semibold text-white">{value}</p>
-      <p className="mt-2 text-sm leading-6 text-slate-400">{detail}</p>
+      <p className="mt-2 font-display text-2xl font-semibold text-white">{value}</p>
+      <p className="mt-1 text-[11px] leading-4 text-slate-400">{detail}</p>
     </div>
   );
 }
@@ -331,14 +327,14 @@ function MetaCard({
   badge?: string;
 }) {
   return (
-    <div className="rounded-[24px] border border-white/8 bg-white/[0.04] p-4">
+    <div className="rounded-xl border border-white/8 bg-white/[0.04] p-3">
       <p className="text-[11px] uppercase tracking-[0.22em] text-slate-500">{label}</p>
       {badge ? (
-        <div className="mt-3">
+        <div className="mt-2">
           <span className={badge}>{value}</span>
         </div>
       ) : (
-        <p className="mt-3 text-sm leading-6 text-white">{value}</p>
+        <p className="mt-2 text-[11px] leading-4 text-white">{value}</p>
       )}
     </div>
   );
@@ -346,7 +342,7 @@ function MetaCard({
 
 function EmptyLibrary({ title }: { title: string }) {
   return (
-    <div className="rounded-[24px] border border-dashed border-white/12 bg-slate-950/20 px-4 py-8 text-center text-sm text-slate-400">
+    <div className="rounded-xl border border-dashed border-white/12 bg-slate-950/20 px-3 py-8 text-center text-sm text-slate-400">
       {title}
     </div>
   );

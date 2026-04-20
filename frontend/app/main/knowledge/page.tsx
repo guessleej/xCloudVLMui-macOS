@@ -70,17 +70,17 @@ function DocCard({ doc, onDelete }: { doc: RagDocument; onDelete: (id: string) =
   const isImage = doc.file_type === "image";
 
   return (
-    <div className="rounded-[24px] border border-white/8 bg-white/[0.035] p-4 transition-colors hover:border-white/15 hover:bg-white/[0.05]">
+    <div className="rounded-xl border border-white/8 bg-white/[0.035] p-3 transition-colors hover:border-white/15 hover:bg-white/[0.05]">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3 min-w-0">
           <div
-            className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl border ${
+            className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-xl border ${
               isImage
                 ? "border-purple-400/20 bg-purple-400/10"
                 : "border-brand-400/20 bg-brand-400/10"
             }`}
           >
-            <Icon className={`h-5 w-5 ${isImage ? "text-purple-300" : "text-brand-300"}`} />
+            <Icon className={`h-3.5 w-3.5 ${isImage ? "text-purple-300" : "text-brand-300"}`} />
           </div>
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-white">{doc.filename}</p>
@@ -94,11 +94,11 @@ function DocCard({ doc, onDelete }: { doc: RagDocument; onDelete: (id: string) =
           className="ghost-button h-8 w-8 flex-shrink-0 rounded-xl px-0 text-slate-500 hover:text-red-400"
           title="刪除"
         >
-          <Trash2 className="h-4 w-4" />
+          <Trash2 className="h-3.5 w-3.5" />
         </button>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-2">
+      <div className="mt-2 flex flex-wrap items-center gap-2">
         <span className="table-chip uppercase">{doc.file_type}</span>
         {doc.embedded ? (
           <span className="status-pill status-pill-ok">
@@ -120,7 +120,7 @@ function DocCard({ doc, onDelete }: { doc: RagDocument; onDelete: (id: string) =
       </div>
 
       {doc.description && (
-        <p className="mt-3 line-clamp-2 text-xs leading-5 text-slate-500">{doc.description}</p>
+        <p className="mt-2 line-clamp-2 text-xs leading-4 text-slate-500">{doc.description}</p>
       )}
     </div>
   );
@@ -156,7 +156,7 @@ function HistoryCard({
   };
 
   return (
-    <div className="rounded-[24px] border border-white/8 bg-white/[0.03] p-5 transition-colors hover:border-white/12">
+    <div className="rounded-xl border border-white/8 bg-white/[0.03] p-3 transition-colors hover:border-white/12">
       {/* 問題 */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-2.5 min-w-0">
@@ -184,15 +184,15 @@ function HistoryCard({
       </div>
 
       {/* 回答摘要 */}
-      <div className="mt-3 rounded-[16px] border border-white/6 bg-slate-950/40 px-4 py-3">
-        <p className="text-xs leading-5 text-slate-400 line-clamp-3">
+      <div className="mt-2 rounded-xl border border-white/6 bg-slate-950/40 px-3 py-2">
+        <p className="text-xs leading-4 text-slate-400 line-clamp-3">
           {item.answer.replace(/#+\s*/g, "").replace(/\*\*/g, "").trim().slice(0, 280)}
           {item.answer.length > 280 && "…"}
         </p>
       </div>
 
       {/* 來源 + 時間 */}
-      <div className="mt-3 flex flex-wrap items-center gap-2">
+      <div className="mt-2 flex flex-wrap items-center gap-2">
         {item.sources && item.sources.length > 0 && (
           <span className="status-pill bg-emerald-400/10 text-emerald-300 border-emerald-400/20">
             <Database className="h-3 w-3" />
@@ -210,14 +210,14 @@ function HistoryCard({
 
       {/* 備註區 */}
       {editingNotes ? (
-        <div className="mt-3 space-y-2">
+        <div className="mt-2 space-y-2">
           <textarea
             ref={textRef}
             value={notesValue}
             onChange={(e) => setNotesValue(e.target.value)}
             placeholder="輸入備註（選填）…"
             rows={2}
-            className="w-full rounded-[16px] border border-white/12 bg-slate-950/50 px-3 py-2 text-xs text-white placeholder-slate-600 focus:border-brand-500/40 focus:outline-none resize-none"
+            className="w-full rounded-xl border border-white/12 bg-slate-950/50 px-3 py-2 text-xs text-white placeholder-slate-600 focus:border-brand-500/40 focus:outline-none resize-none"
           />
           <div className="flex items-center gap-2">
             <button
@@ -237,7 +237,7 @@ function HistoryCard({
           </div>
         </div>
       ) : item.notes ? (
-        <div className="mt-3 flex items-start gap-2 rounded-[14px] border border-brand-400/15 bg-brand-400/5 px-3 py-2">
+        <div className="mt-2 flex items-start gap-2 rounded-xl border border-brand-400/15 bg-brand-400/5 px-3 py-2">
           <Edit2 className="mt-0.5 h-3 w-3 flex-shrink-0 text-brand-400" />
           <p className="text-xs text-slate-400">{item.notes}</p>
         </div>
@@ -433,20 +433,16 @@ export default function KnowledgePage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* ── Header ── */}
-      <section className="panel-grid overflow-hidden rounded-[32px] p-6 sm:p-7 lg:p-8">
-        <div className="relative z-10 grid gap-6 xl:grid-cols-[1.25fr_0.9fr]">
+      <section className="panel-grid overflow-hidden rounded-2xl p-3 sm:p-4">
+        <div className="relative z-10 grid gap-3 xl:grid-cols-[1.25fr_0.9fr]">
           <div>
-            <div className="section-kicker">Knowledge Ops</div>
-            <h1 className="display-title mt-4 text-3xl leading-tight sm:text-[40px]">
-              知識作業台
-            </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-              上傳維修手冊、SOP 與現場圖片，透過 OCR 與向量嵌入建立可語意搜尋的知識庫，
-              再以 AI 問答方式直接提取診斷依據。問答歷史自動儲存，可隨時查閱、編輯備註或刪除。
-            </p>
-            <div className="mt-6 flex flex-wrap gap-2">
+            <div className="flex items-center gap-2.5 mb-2">
+              <div className="section-kicker">Knowledge Ops</div>
+              <h2 className="mt-1 text-sm font-semibold text-white">知識作業台</h2>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
               <span className="signal-chip">
                 <FileText className="h-3.5 w-3.5 text-brand-300" />
                 PDF / TXT / MD / CSV
@@ -467,16 +463,16 @@ export default function KnowledgePage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-2">
             {[
               { label: "知識文件",   value: stats.total,    unit: "份" },
               { label: "已建立索引", value: stats.embedded, unit: "份" },
               { label: "向量段落",   value: stats.chunks,   unit: "段" },
               { label: "問答歷史",   value: historyTotal,   unit: "筆" },
             ].map(({ label, value, unit }) => (
-              <div key={label} className="rounded-[26px] border border-white/10 bg-white/[0.04] p-5">
+              <div key={label} className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
                 <p className="text-xs uppercase tracking-[0.22em] text-slate-500">{label}</p>
-                <p className="mt-3 font-display text-3xl font-semibold text-white">
+                <p className="mt-2 font-display text-2xl font-semibold text-white">
                   {value}
                   <span className="ml-1 text-base font-normal text-slate-400">{unit}</span>
                 </p>
@@ -487,10 +483,10 @@ export default function KnowledgePage() {
       </section>
 
       {/* ── Tab Bar ── */}
-      <div className="flex items-center gap-1 rounded-[20px] border border-white/8 bg-white/[0.03] p-1 w-fit">
+      <div className="flex items-center gap-1 rounded-xl border border-white/8 bg-white/[0.03] p-1 w-fit">
         <button
           onClick={() => setActiveTab("chat")}
-          className={`flex items-center gap-2 rounded-[16px] px-5 py-2.5 text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all ${
             activeTab === "chat"
               ? "bg-brand-600 text-white shadow-sm"
               : "text-slate-400 hover:text-white"
@@ -501,7 +497,7 @@ export default function KnowledgePage() {
         </button>
         <button
           onClick={() => setActiveTab("history")}
-          className={`flex items-center gap-2 rounded-[16px] px-5 py-2.5 text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all ${
             activeTab === "history"
               ? "bg-brand-600 text-white shadow-sm"
               : "text-slate-400 hover:text-white"
@@ -517,7 +513,7 @@ export default function KnowledgePage() {
         </button>
         <button
           onClick={() => setActiveTab("manage")}
-          className={`flex items-center gap-2 rounded-[16px] px-5 py-2.5 text-sm font-semibold transition-all ${
+          className={`flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all ${
             activeTab === "manage"
               ? "bg-brand-600 text-white shadow-sm"
               : "text-slate-400 hover:text-white"
@@ -535,19 +531,19 @@ export default function KnowledgePage() {
 
       {/* ── Tab: 知識問答 ── */}
       {activeTab === "chat" && (
-        <div className="panel-soft min-h-[820px] overflow-hidden rounded-[32px]">
+        <div className="panel-soft min-h-[820px] overflow-hidden rounded-2xl">
           <ChatInterface />
         </div>
       )}
 
       {/* ── Tab: 歷史記錄 ── */}
       {activeTab === "history" && (
-        <div className="panel-soft rounded-[32px] p-5 sm:p-6">
+        <div className="panel-soft rounded-2xl p-3 sm:p-4">
           {/* 工具列 */}
-          <div className="flex flex-col gap-4 border-b border-white/8 pb-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 border-b border-white/8 pb-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs uppercase tracking-[0.22em] text-slate-500">Chat History</p>
-              <h2 className="mt-2 text-xl font-semibold text-white">
+              <h2 className="mt-1 text-sm font-semibold text-white">
                 問答歷史
                 <span className="ml-2 text-sm font-normal text-slate-500">
                   （共 {historyTotal} 筆）
@@ -563,7 +559,7 @@ export default function KnowledgePage() {
                     value={historySearch}
                     onChange={(e) => setHistorySearch(e.target.value)}
                     placeholder="搜尋問題…"
-                    className="h-9 w-48 rounded-[14px] border border-white/10 bg-white/[0.04] pl-8 pr-3 text-xs text-white placeholder-slate-600 focus:border-brand-500/40 focus:outline-none"
+                    className="h-9 w-48 rounded-xl border border-white/10 bg-white/[0.04] pl-8 pr-3 text-xs text-white placeholder-slate-600 focus:border-brand-500/40 focus:outline-none"
                   />
                 </div>
                 <button type="submit" className="secondary-button h-9 text-xs px-3">
@@ -574,7 +570,7 @@ export default function KnowledgePage() {
               <button
                 onClick={() => loadHistory(0, historySearch)}
                 disabled={historyLoading}
-                className="ghost-button h-9 w-9 rounded-[14px] px-0"
+                className="ghost-button h-9 w-9 rounded-xl px-0"
                 title="重新整理"
               >
                 <RefreshCw className={`h-4 w-4 ${historyLoading ? "animate-spin" : ""}`} />
@@ -583,7 +579,7 @@ export default function KnowledgePage() {
               {historyItems.length > 0 && (
                 <button
                   onClick={handleClearAllHistory}
-                  className="ghost-button h-9 rounded-[14px] px-3 text-xs text-slate-500 hover:text-red-400"
+                  className="ghost-button h-9 rounded-xl px-3 text-xs text-slate-500 hover:text-red-400"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                   清空全部
@@ -593,15 +589,15 @@ export default function KnowledgePage() {
           </div>
 
           {/* 歷史列表 */}
-          <div className="mt-4 space-y-3 overflow-y-auto" style={{ maxHeight: "65vh" }}>
+          <div className="mt-2 space-y-3 overflow-y-auto" style={{ maxHeight: "65vh" }}>
             {historyLoading && historyItems.length === 0 ? (
               <div className="flex items-center justify-center py-16">
                 <RefreshCw className="h-6 w-6 animate-spin text-slate-500" />
               </div>
             ) : historyItems.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-center">
-                <History className="h-10 w-10 text-slate-600" />
-                <p className="mt-4 text-sm text-slate-500">
+                <History className="h-7 w-7 text-slate-600" />
+                <p className="mt-2 text-sm text-slate-500">
                   {historySearch
                     ? "找不到符合的問答記錄。"
                     : "尚無問答歷史，切換至「知識問答」開始提問。"}
@@ -638,30 +634,30 @@ export default function KnowledgePage() {
 
       {/* ── Tab: 文件管理 ── */}
       {activeTab === "manage" && (
-        <div className="grid gap-6 xl:grid-cols-[1fr_1.5fr]">
+        <div className="grid gap-3 xl:grid-cols-[1fr_1.5fr]">
           {/* 上傳區 */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div
               onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
               onDragLeave={() => setDragOver(false)}
               onDrop={handleDrop}
-              className={`rounded-[30px] border-2 border-dashed p-8 text-center transition-colors ${
+              className={`rounded-2xl border-2 border-dashed p-4 text-center transition-colors ${
                 dragOver
                   ? "border-brand-400/60 bg-brand-400/10"
                   : "border-white/15 bg-white/[0.02] hover:border-white/25 hover:bg-white/[0.04]"
               }`}
             >
               <div className="flex justify-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05]">
-                  <Upload className="h-7 w-7 text-slate-300" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05]">
+                  <Upload className="h-3.5 w-3.5 text-slate-300" />
                 </div>
               </div>
-              <p className="mt-4 text-sm font-semibold text-white">拖曳檔案至此上傳</p>
-              <p className="mt-2 text-xs leading-5 text-slate-500">
+              <p className="mt-2 text-sm font-semibold text-white">拖曳檔案至此上傳</p>
+              <p className="mt-1 text-[11px] leading-4 text-slate-500">
                 支援文件（PDF、TXT、MD、CSV）<br />
                 與圖片（JPG、PNG、WEBP）— 圖片自動進行 OCR
               </p>
-              <div className="mt-6 flex justify-center gap-3">
+              <div className="mt-3 flex justify-center gap-3">
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   className="secondary-button"
@@ -697,14 +693,14 @@ export default function KnowledgePage() {
 
             {/* 上傳進度佇列 */}
             {queue.length > 0 && (
-              <div className="panel-soft rounded-[28px] p-4 space-y-3">
+              <div className="panel-soft rounded-xl p-3 space-y-3">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
                   上傳進度
                 </p>
                 {queue.map((item) => (
                   <div
                     key={item.id}
-                    className="rounded-[20px] border border-white/8 bg-slate-950/30 px-4 py-3"
+                    className="rounded-xl border border-white/8 bg-slate-950/30 px-3 py-2"
                   >
                     <div className="flex items-center justify-between gap-2">
                       <p className="truncate text-sm font-medium text-white">{item.file.name}</p>
@@ -737,7 +733,7 @@ export default function KnowledgePage() {
             )}
 
             {/* 使用建議 */}
-            <div className="panel-soft rounded-[28px] p-5 space-y-3">
+            <div className="panel-soft rounded-xl p-3 space-y-3">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
                 建議作法
               </p>
@@ -748,29 +744,29 @@ export default function KnowledgePage() {
               ].map((tip) => (
                 <div
                   key={tip}
-                  className="flex items-start gap-3 rounded-[18px] border border-white/8 bg-slate-950/30 px-4 py-3"
+                  className="flex items-start gap-3 rounded-xl border border-white/8 bg-slate-950/30 px-3 py-2"
                 >
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-300" />
-                  <p className="text-xs leading-5 text-slate-400">{tip}</p>
+                  <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-emerald-300" />
+                  <p className="text-[11px] leading-4 text-slate-400">{tip}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* 文件列表 */}
-          <div className="panel-soft rounded-[32px] p-5 sm:p-6">
-            <div className="flex flex-col gap-4 border-b border-white/8 pb-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="panel-soft rounded-xl p-3 sm:p-4">
+            <div className="flex flex-col gap-3 border-b border-white/8 pb-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.22em] text-slate-500">
                   Knowledge Index
                 </p>
-                <h2 className="mt-2 text-xl font-semibold text-white">
+                <h2 className="mt-1 text-sm font-semibold text-white">
                   知識庫文件
                   <span className="ml-2 text-sm font-normal text-slate-500">({filteredDocs.length})</span>
                 </h2>
               </div>
               <div className="flex items-center gap-2">
-                <div className="flex rounded-[16px] border border-white/10 bg-white/[0.04] p-1">
+                <div className="flex rounded-xl border border-white/10 bg-white/[0.04] p-1">
                   {(["all", "document", "image"] as const).map((t) => (
                     <button
                       key={t}
@@ -788,7 +784,7 @@ export default function KnowledgePage() {
                 <button
                   onClick={loadDocs}
                   disabled={loading}
-                  className="ghost-button h-9 w-9 rounded-[14px] px-0"
+                  className="ghost-button h-9 w-9 rounded-xl px-0"
                   title="重新整理"
                 >
                   <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
@@ -796,15 +792,15 @@ export default function KnowledgePage() {
               </div>
             </div>
 
-            <div className="mt-4 space-y-3 overflow-y-auto" style={{ maxHeight: "60vh" }}>
+            <div className="mt-2 space-y-3 overflow-y-auto" style={{ maxHeight: "60vh" }}>
               {loading && docs.length === 0 ? (
                 <div className="flex items-center justify-center py-16">
                   <RefreshCw className="h-6 w-6 animate-spin text-slate-500" />
                 </div>
               ) : filteredDocs.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
-                  <Database className="h-10 w-10 text-slate-600" />
-                  <p className="mt-4 text-sm text-slate-500">
+                  <Database className="h-7 w-7 text-slate-600" />
+                  <p className="mt-2 text-sm text-slate-500">
                     {filterType === "all"
                       ? "知識庫尚無文件，請從左側上傳。"
                       : `尚無${filterType === "image" ? "圖片" : "文件"}類型的知識庫項目。`}
