@@ -38,15 +38,15 @@ function StatCard({
   icon: ElementType;
 }) {
   return (
-    <div className="metric-card p-5">
+    <div className="metric-card px-4 py-3">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.22em] text-slate-500">{title}</p>
-          <p className="mt-3 font-display text-4xl font-semibold text-white">{value}</p>
-          <p className="mt-2 text-sm leading-6 text-slate-400">{detail}</p>
+          <p className="mt-1.5 font-display text-2xl font-semibold text-white">{value}</p>
+          <p className="mt-1 text-[11px] leading-4 text-slate-400">{detail}</p>
         </div>
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-slate-950/35">
-          <Icon className="h-5 w-5 text-accent-200" />
+        <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-slate-950/35">
+          <Icon className="h-3.5 w-3.5 text-accent-200" />
         </div>
       </div>
     </div>
@@ -195,7 +195,7 @@ export default function DashboardPage() {
   const actionGuide = getActionGuide(selected);
 
   return (
-    <div className="space-y-6 pb-2">
+    <div className="space-y-3 pb-2">
       <EquipmentDetailDrawer
         equipment={drawerEquipment}
         alerts={alerts}
@@ -204,19 +204,15 @@ export default function DashboardPage() {
         onCreateAlert={handleCreateAlert}
         onResolve={handleResolveAlert}
       />
-      <section className="panel-grid overflow-hidden rounded-[32px] p-6 sm:p-7 lg:p-8">
-        <div className="relative z-10 grid gap-6 xl:grid-cols-[1.35fr_0.9fr]">
+      <section className="panel-grid overflow-hidden rounded-[32px] p-4">
+        <div className="relative z-10 grid gap-4 xl:grid-cols-[1.35fr_0.9fr]">
           <div>
-            <div className="section-kicker">Operations Snapshot</div>
-            <h1 className="display-title mt-4 text-3xl leading-tight sm:text-[42px]">
-              製造設備維護戰情中心
-            </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-              將巡檢影像、邊緣推論與維護輸出整合成同一個判斷畫面，
-              讓現場技術人員可以在幾秒內掌握異常級別與下一步行動。
-            </p>
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="section-kicker">Operations Snapshot</div>
+              <h2 className="text-sm font-semibold text-white">製造設備維護戰情中心</h2>
+            </div>
 
-            <div className="mt-6 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-2">
               <span className="signal-chip">
                 <Cpu className="h-3.5 w-3.5 text-accent-300" />
                 NVIDIA Jetson Series
@@ -232,7 +228,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             <MetricBlock
               label="未解決事件"
               value={`${totalAlerts}`}
@@ -260,7 +256,7 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           title="設備總數"
           value={summary.total}
@@ -287,13 +283,13 @@ export default function DashboardPage() {
         />
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[1.45fr_0.95fr]">
-        <div className="panel-soft rounded-[32px] p-5 sm:p-6">
-          <div className="flex flex-col gap-4 border-b border-white/8 pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <section className="grid gap-3 xl:grid-cols-[1.45fr_0.95fr]">
+        <div className="panel-soft rounded-2xl p-3 sm:p-4">
+          <div className="flex flex-col gap-3 border-b border-white/8 pb-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="section-kicker">Equipment Board</div>
-              <h2 className="mt-3 text-2xl font-semibold text-white">受監控設備</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-400">
+              <h2 className="mt-1.5 text-sm font-semibold text-white">受監控設備</h2>
+              <p className="mt-1 text-[11px] leading-4 text-slate-400">
                 依設備健康狀態切換詳情，快速定位高風險節點與維保優先順序。
               </p>
             </div>
@@ -308,7 +304,7 @@ export default function DashboardPage() {
             </button>
           </div>
 
-          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+          <div className="mt-3 grid gap-2 lg:grid-cols-2">
             {equipment.map((item) => (
               <EquipmentCard
                 key={item.id}
@@ -321,37 +317,37 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="panel-soft rounded-[32px] p-5 sm:p-6">
+        <div className="space-y-3">
+          <div className="panel-soft rounded-2xl p-3 sm:p-4">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <div className="section-kicker">Selected Asset</div>
-                <h2 className="mt-3 text-2xl font-semibold text-white">
+                <h2 className="mt-1.5 text-sm font-semibold text-white">
                   {selected?.name ?? "尚未選擇設備"}
                 </h2>
-                <p className="mt-2 text-sm leading-6 text-slate-400">
+                <p className="mt-1 text-[11px] leading-4 text-slate-400">
                   {selected?.location ?? "請從左側設備卡切換查看詳情。"}
                 </p>
               </div>
-              <div className="rounded-[24px] border border-white/8 bg-slate-950/35 px-4 py-3 text-right">
+              <div className="rounded-xl border border-white/8 bg-slate-950/35 px-3 py-2 text-right">
                 <p className="text-[11px] uppercase tracking-[0.22em] text-slate-500">VHS</p>
-                <p className="font-display text-4xl font-semibold text-white">
+                <p className="font-display text-2xl font-semibold text-white">
                   {selected?.vhs_score?.toFixed(1) ?? "--"}
                 </p>
               </div>
             </div>
 
-            <div className="mt-5 rounded-[26px] border border-white/8 bg-white/[0.035] p-4">
+            <div className="mt-3 rounded-xl border border-white/8 bg-white/[0.035] p-3">
               <p className="text-[11px] uppercase tracking-[0.22em] text-slate-500">優先建議</p>
-              <p className="mt-2 text-lg font-semibold text-white">{actionGuide.title}</p>
-              <p className="mt-2 text-sm leading-6 text-slate-300">{actionGuide.summary}</p>
-              <div className="mt-4 flex items-center justify-between rounded-2xl border border-white/8 bg-slate-950/35 px-3 py-3">
-                <span className="text-sm font-medium text-white">{actionGuide.nextStep}</span>
+              <p className="mt-1 text-sm font-semibold text-white">{actionGuide.title}</p>
+              <p className="mt-1 text-[11px] leading-4 text-slate-300">{actionGuide.summary}</p>
+              <div className="mt-2 flex items-center justify-between rounded-xl border border-white/8 bg-slate-950/35 px-3 py-2">
+                <span className="text-xs font-medium text-white">{actionGuide.nextStep}</span>
                 <ArrowRight className="h-4 w-4 text-brand-300" />
               </div>
             </div>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            <div className="mt-3 grid gap-2 sm:grid-cols-3">
               <CompactMetric label="設備型別" value={selected?.type ?? "--"} />
               <CompactMetric
                 label="活躍警報"
@@ -379,7 +375,7 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[1.28fr_0.72fr]">
+      <section className="grid gap-3 xl:grid-cols-[1.28fr_0.72fr]">
         <VhsChart
           meta={vhsMeta}
           equipmentId={selected?.id ?? ""}
@@ -403,10 +399,10 @@ function MetricBlock({
   detail: string;
 }) {
   return (
-    <div className="rounded-[26px] border border-white/10 bg-white/[0.04] p-5">
+    <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
       <p className="text-xs uppercase tracking-[0.22em] text-slate-500">{label}</p>
-      <p className="mt-3 font-display text-3xl font-semibold text-white">{value}</p>
-      <p className="mt-2 text-sm leading-6 text-slate-400">{detail}</p>
+      <p className="mt-1 font-display text-xl font-semibold text-white">{value}</p>
+      <p className="mt-1 text-[11px] leading-4 text-slate-400">{detail}</p>
     </div>
   );
 }
@@ -419,9 +415,9 @@ function CompactMetric({
   value: string;
 }) {
   return (
-    <div className="rounded-[22px] border border-white/8 bg-slate-950/30 px-4 py-4">
+    <div className="rounded-xl border border-white/8 bg-slate-950/30 px-3 py-2">
       <p className="text-[11px] uppercase tracking-[0.22em] text-slate-500">{label}</p>
-      <p className="mt-2 text-base font-medium text-white">{value}</p>
+      <p className="mt-1 text-sm font-medium text-white">{value}</p>
     </div>
   );
 }
