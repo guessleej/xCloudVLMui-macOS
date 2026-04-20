@@ -149,6 +149,9 @@ services:
     build:
       context:    ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: "http://localhost:3110"
+        NEXT_PUBLIC_WS_URL:  ""
     image: xcloudvlmui-mac-frontend:latest
     container_name: mac-frontend
     restart: unless-stopped
