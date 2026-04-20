@@ -2,13 +2,14 @@
 
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
-  Bell,
   Clock3,
   LogOut,
   PanelLeftClose,
   PanelLeftOpen,
   Sparkles,
+  Wifi,
 } from "lucide-react";
 import { PAGE_META } from "@/lib/navigation";
 
@@ -30,100 +31,103 @@ export default function TopNav({
   const pathname = usePathname();
   const meta = PAGE_META[pathname] ?? {
     title: "xCloudVLMui",
-    description: "製造業設備維護戰情中心",
+    description: "",
     eyebrow: "Overview",
   };
 
-  const now = new Intl.DateTimeFormat("zh-TW", {
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date());
+  const [now, setNow] = useState("");
+  useEffect(() => {
+    const fmt = () =>
+      new Intl.DateTimeFormat("zh-TW", {
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(new Date());
+    setNow(fmt());
+    const id = setInterval(() => setNow(fmt()), 60_000);
+    return () => clearInterval(id);
+  }, []);
 
   const initials = user?.name
-    ? user.name
-        .split(" ")
-        .map((segment) => segment[0])
-        .join("")
-        .slice(0, 2)
-        .toUpperCase()
+    ? user.name.split(" ").map((s) => s[0]).join("").slice(0, 2).toUpperCase()
     : "XC";
 
   return (
-    <header className="relative z-10 border-b border-white/8 bg-surface/50 px-4 py-4 backdrop-blur-xl sm:px-6 lg:px-8">
-      <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="min-w-0">
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={onToggleSidebar}
-              className="secondary-button hidden h-11 w-11 rounded-2xl px-0 lg:inline-flex"
-              title={sidebarCollapsed ? "展開側欄" : "收合側欄"}
-              aria-label={sidebarCollapsed ? "展開側欄" : "收合側欄"}
-            >
-              {sidebarCollapsed ? (
-                <PanelLeftOpen className="h-4 w-4" />
-              ) : (
-                <PanelLeftClose className="h-4 w-4" />
-              )}
-            </button>
+    <header className="relative z-10 flex h-11 shrink-0 items-center border-b border-white/8 bg-surface/70 px-3 backdrop-blur-xl sm:px-4 lg:px-5">
+      {/* ── 左側：側欄切換 + 頁面標題 ───────────────────────────── */}
+      <div className="flex items-center gap-2 min-w-0">
+        <button
+          type="button"
+          onClick={onToggleSidebar}
+          className="hidden h-7 w-7 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-white/[0.06] hover:text-slate-300 lg:inline-flex"
+          title={sidebarCollapsed ? "展開側欄" : "收合側欄"}
+        >
+          {sidebarCollapsed
+            ? <PanelLeftOpen  className="h-3.5 w-3.5" />
+            : <PanelLeftClose className="h-3.5 w-3.5" />
+          }
+        </button>
 
-            <div className="section-kicker">{meta.eyebrow}</div>
-          </div>
+        <div className="hidden h-3.5 w-px bg-white/10 lg:block" />
 
-          <div className="mt-3 flex flex-col gap-2 lg:flex-row lg:items-end lg:gap-4">
-            <div className="min-w-0">
-              <h2 className="display-title text-2xl sm:text-[30px]">{meta.title}</h2>
-              <p className="mt-1 max-w-3xl text-sm leading-6 text-slate-400">
-                {meta.description}
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <span className="signal-chip">
-                <Sparkles className="h-3.5 w-3.5 text-brand-300" />
-                Offline First
-              </span>
-              <span className="signal-chip">
-                <Clock3 className="h-3.5 w-3.5 text-accent-300" />
-                {now}
-              </span>
-            </div>
-          </div>
+        {/* eyebrow badge */}
+        <span className="hidden shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-500 sm:block">
+          {meta.eyebrow}
+        </span>
+        <span className="hidden text-[10px] text-slate-700 sm:block">/</span>
+
+        {/* page title */}
+        <h1 className="truncate text-sm font-semibold text-white">{meta.title}</h1>
+      </div>
+
+      {/* ── 中間彈性空白 ─────────────────────────────────────────── */}
+      <div className="flex-1" />
+
+      {/* ── 右側：狀態徽章 + 用戶 ────────────────────────────────── */}
+      <div className="flex items-center gap-2">
+        {/* 狀態晶片 */}
+        <div className="hidden items-center gap-1.5 sm:flex">
+          <span className="flex items-center gap-1 rounded-full border border-white/8 bg-white/[0.035] px-2 py-0.5 text-[10px] font-medium text-slate-400">
+            <Wifi className="h-2.5 w-2.5 text-emerald-400" />
+            Offline
+          </span>
+          <span className="flex items-center gap-1 rounded-full border border-white/8 bg-white/[0.035] px-2 py-0.5 text-[10px] font-medium text-slate-400">
+            <Sparkles className="h-2.5 w-2.5 text-brand-300" />
+            Edge AI
+          </span>
+          <span className="flex items-center gap-1 rounded-full border border-white/8 bg-white/[0.035] px-2 py-0.5 text-[10px] font-medium text-slate-400">
+            <Clock3 className="h-2.5 w-2.5 text-accent-300" />
+            {now}
+          </span>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 lg:justify-end">
-          <div className="panel-soft flex items-center gap-3 rounded-[22px] px-3 py-2.5">
-            {user?.image ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={user.image}
-                alt={user.name ?? "user"}
-                className="h-11 w-11 rounded-2xl border border-white/10 object-cover"
-              />
-            ) : (
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-brand-400/20 bg-brand-500/10 text-sm font-semibold text-white">
-                {initials}
-              </div>
-            )}
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-white">
-                {user?.name ?? "現場操作員"}
-              </p>
-              <p className="truncate text-xs text-slate-500">
-                {user?.email ?? "本地安全登入"}
-              </p>
-            </div>
-            <button
-              onClick={() => signOut({ callbackUrl: "/auth/login" })}
-              className="ghost-button px-3 py-2 text-xs"
-              title="登出"
-            >
-              <LogOut className="h-4 w-4" />
-              登出
-            </button>
+        <div className="h-3.5 w-px bg-white/10" />
+
+        {/* 用戶 */}
+        {user?.image ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={user.image}
+            alt={user.name ?? "user"}
+            className="h-6 w-6 rounded-lg border border-white/10 object-cover"
+          />
+        ) : (
+          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-brand-400/25 bg-brand-500/12 text-[9px] font-bold text-white">
+            {initials}
           </div>
-        </div>
+        )}
+        <span className="hidden max-w-[96px] truncate text-xs font-medium text-slate-300 md:block">
+          {user?.name ?? "操作員"}
+        </span>
+
+        <button
+          onClick={() => signOut({ callbackUrl: "/auth/login" })}
+          title="登出"
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-white/[0.06] hover:text-slate-300"
+        >
+          <LogOut className="h-3.5 w-3.5" />
+        </button>
       </div>
     </header>
   );

@@ -175,7 +175,7 @@ export default function SettingsPage() {
     setEmbedTest(null);
     const t0 = Date.now();
     try {
-      const res = await fetch("/backend-api/api/rag/query", {
+      const res = await fetch("/api/rag/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: "test embedding connection", top_k: 1 }),
