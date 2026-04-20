@@ -49,10 +49,10 @@ function CustomTooltip({
   const srcLbl = SOURCE_LABEL[point.source] ?? "未知";
 
   return (
-    <div className="rounded-[20px] border border-white/10 bg-slate-950/95 px-4 py-3 shadow-panel">
-      <p className="text-xs uppercase tracking-[0.2em] text-slate-500">{label}</p>
-      <p className="mt-2 font-display text-2xl font-semibold text-white">{value.toFixed(1)}</p>
-      <div className="mt-2 flex items-center gap-2">
+    <div className="rounded-xl border border-white/10 bg-slate-950/95 px-3 py-2 shadow-panel">
+      <p className="text-[10px] uppercase tracking-[0.2em] text-slate-500">{label}</p>
+      <p className="mt-1 font-display text-xl font-semibold text-white">{value.toFixed(1)}</p>
+      <div className="mt-1 flex items-center gap-1.5">
         <p className="text-xs text-slate-400">{zone}</p>
         <span className="text-slate-600">·</span>
         <div className="flex items-center gap-1.5">
@@ -124,9 +124,9 @@ function RecordForm({
     score >= 40 ? "text-amber-300"   : "text-rose-300";
 
   return (
-    <div className="mt-4 rounded-[24px] border border-brand-400/25 bg-brand-400/8 p-5">
+    <div className="mt-3 rounded-xl border border-brand-400/25 bg-brand-400/8 p-3">
       <div className="flex items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-white">記錄 VHS 分數</p>
+        <p className="text-xs font-semibold text-white">記錄 VHS 分數</p>
         <button onClick={onCancel} className="text-slate-500 hover:text-slate-300">
           <X className="h-4 w-4" />
         </button>
@@ -134,12 +134,12 @@ function RecordForm({
       <p className="mt-1 text-xs text-slate-500">{equipmentName} · 人工巡檢輸入</p>
 
       {/* Score slider */}
-      <div className="mt-5">
+      <div className="mt-3">
         <div className="flex items-center justify-between">
-          <label className="text-xs uppercase tracking-[0.2em] text-slate-500">
+          <label className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
             Visual Health Score
           </label>
-          <span className={`font-display text-3xl font-semibold ${scoreColor}`}>
+          <span className={`font-display text-xl font-semibold ${scoreColor}`}>
             {score}
           </span>
         </div>
@@ -150,7 +150,7 @@ function RecordForm({
           step={0.5}
           value={score}
           onChange={(e) => setScore(parseFloat(e.target.value))}
-          className="mt-3 w-full accent-brand-400"
+          className="mt-2 w-full accent-brand-400"
         />
         <div className="mt-1 flex justify-between text-[10px] text-slate-600">
           <span>0 危急</span>
@@ -161,8 +161,8 @@ function RecordForm({
       </div>
 
       {/* Notes */}
-      <div className="mt-4">
-        <label className="text-xs uppercase tracking-[0.2em] text-slate-500">
+      <div className="mt-2">
+        <label className="text-[10px] uppercase tracking-[0.2em] text-slate-500">
           備註（選填）
         </label>
         <input
@@ -170,12 +170,12 @@ function RecordForm({
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           placeholder="例：更換軸承後首次量測"
-          className="mt-2 w-full rounded-[16px] border border-white/8 bg-slate-950/40 px-4 py-2.5 text-sm text-white placeholder-slate-600 outline-none focus:border-brand-400/50 focus:ring-0"
+          className="mt-1.5 w-full rounded-xl border border-white/8 bg-slate-950/40 px-3 py-2 text-xs text-white placeholder-slate-600 outline-none focus:border-brand-400/50 focus:ring-0"
         />
       </div>
 
       {/* Submit */}
-      <div className="mt-4 flex gap-3">
+      <div className="mt-3 flex gap-2">
         <button
           onClick={handleSubmit}
           disabled={saving || success}
@@ -223,31 +223,31 @@ export default function VhsChart({
     color: string; label: string; value: string;
   }) {
     return (
-      <div className="rounded-2xl border border-white/8 bg-slate-950/35 px-3 py-3">
-        <div className="flex items-center justify-center gap-2">
-          <span className={`h-2.5 w-2.5 rounded-full ${color}`} />
-          <span className="font-medium text-white">{label}</span>
+      <div className="rounded-xl border border-white/8 bg-slate-950/35 px-2 py-1.5">
+        <div className="flex items-center justify-center gap-1.5">
+          <span className={`h-2 w-2 rounded-full ${color}`} />
+          <span className="text-[11px] font-medium text-white">{label}</span>
         </div>
-        <p className="mt-1 text-slate-500">{value}</p>
+        <p className="mt-0.5 text-[10px] text-slate-500">{value}</p>
       </div>
     );
   }
 
   return (
-    <div className="panel-soft overflow-hidden rounded-[30px] p-5 sm:p-6">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div className="panel-soft overflow-hidden rounded-2xl p-3 sm:p-4">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <div className="section-kicker">Health Trend</div>
-          <h3 className="mt-3 text-xl font-semibold text-white">
+          <h3 className="mt-1.5 text-sm font-semibold text-white">
             {equipmentName || "尚未選擇設備"}
           </h3>
-          <p className="mt-2 text-sm leading-6 text-slate-400">
+          <p className="mt-1 text-[11px] leading-4 text-slate-400">
             過去 14 天的視覺健康分數變化，用於觀察退化速度與維修節奏是否有效。
           </p>
 
           {/* 資料來源 badge */}
           {meta && (
-            <div className="mt-3 flex flex-wrap items-center gap-2">
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
               <div className="flex items-center gap-1.5 rounded-xl border border-white/8 bg-white/[0.04] px-3 py-1.5">
                 <Database className="h-3.5 w-3.5 text-accent-300" />
                 <span className="text-xs text-slate-300">
@@ -278,8 +278,8 @@ export default function VhsChart({
           )}
         </div>
 
-        <div className="flex flex-col items-end gap-3">
-          <div className="grid grid-cols-3 gap-2 text-center text-xs sm:min-w-[360px]">
+        <div className="flex flex-col items-end gap-2">
+          <div className="grid grid-cols-3 gap-1.5 text-center text-xs sm:min-w-[260px]">
             <LegendItem color="bg-emerald-400" label="穩定區" value="70 - 100" />
             <LegendItem color="bg-amber-300"   label="警戒區" value="40 - 69" />
             <LegendItem color="bg-rose-400"    label="危急區" value="0 - 39" />
@@ -312,7 +312,7 @@ export default function VhsChart({
       )}
 
       {/* 圖表 */}
-      <div className="mt-6 h-[300px]">
+      <div className="mt-3 h-[200px]">
         {data.length === 0 ? (
           <div className="flex h-full items-center justify-center text-slate-500">
             <p className="text-sm">請先選擇設備</p>
