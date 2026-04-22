@@ -40,24 +40,24 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
       }`}
     >
       {/* ── Logo 標題列 ─────────────────────────────────────────── */}
-      <div className={`flex h-11 shrink-0 items-center border-b border-white/8 ${collapsed ? "justify-center px-2" : "justify-between px-4"}`}>
+      <div className={`flex h-14 shrink-0 items-center border-b border-white/8 ${collapsed ? "justify-center px-2" : "justify-between px-4"}`}>
         {!collapsed && (
-          <div className="flex items-center gap-2.5 min-w-0">
+          <div className="flex items-center gap-3 min-w-0">
             {/* X logo mark */}
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-brand-400/30 bg-brand-500/15">
-              <svg viewBox="0 0 24 24" fill="none" className="h-3.5 w-3.5">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-brand-400/30 bg-brand-500/15">
+              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
                 <path d="M19.5 4.5L4.5 19.5" stroke="rgba(255,255,255,0.3)" strokeWidth="5" strokeLinecap="round" />
                 <path d="M4.5 4.5L12 12" stroke="white" strokeWidth="5" strokeLinecap="round" />
                 <path d="M12 12L19.5 19.5" stroke="white" strokeWidth="5" strokeLinecap="round" />
               </svg>
             </div>
-            <span className="text-sm font-bold text-white tracking-tight">xCloud<span className="text-brand-300">VLM</span></span>
+            <span className="text-base font-bold text-white tracking-tight">xCloud<span className="text-brand-300">VLM</span></span>
           </div>
         )}
 
         {collapsed && (
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-brand-400/30 bg-brand-500/15">
-            <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-brand-400/30 bg-brand-500/15">
+            <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
               <path d="M19.5 4.5L4.5 19.5" stroke="rgba(255,255,255,0.3)" strokeWidth="5" strokeLinecap="round" />
               <path d="M4.5 4.5L12 12" stroke="white" strokeWidth="5" strokeLinecap="round" />
               <path d="M12 12L19.5 19.5" stroke="white" strokeWidth="5" strokeLinecap="round" />
@@ -68,7 +68,7 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
         <button
           type="button"
           onClick={onToggle}
-          className={`hidden h-7 w-7 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-white/[0.06] hover:text-slate-300 lg:flex ${collapsed ? "absolute -right-3.5 top-2 border border-white/10 bg-surface/90 backdrop-blur-sm" : ""}`}
+          className={`hidden h-7 w-7 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-white/[0.06] hover:text-slate-300 lg:flex ${collapsed ? "absolute -right-3.5 top-3 border border-white/10 bg-surface/90 backdrop-blur-sm" : ""}`}
           title={collapsed ? "展開側欄" : "收合側欄"}
         >
           {collapsed ? <PanelLeftOpen className="h-3.5 w-3.5" /> : <PanelLeftClose className="h-3.5 w-3.5" />}
