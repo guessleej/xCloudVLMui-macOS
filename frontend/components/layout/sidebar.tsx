@@ -51,7 +51,7 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
                 <path d="M12 12L19.5 19.5" stroke="white" strokeWidth="5" strokeLinecap="round" />
               </svg>
             </div>
-            <span className="text-lg font-bold text-white tracking-tight">xCloud<span className="text-brand-300">VLM</span></span>
+            <span className="text-lg font-bold text-white tracking-tight">xCloud<span className="text-brand-300">VLM</span><span className="text-slate-400">ui</span></span>
           </div>
         )}
 
