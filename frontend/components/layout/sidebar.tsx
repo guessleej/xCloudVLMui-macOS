@@ -36,7 +36,7 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
   return (
     <aside
       className={`relative z-10 flex flex-col border-b border-white/8 bg-surface/80 backdrop-blur-xl transition-[width] duration-300 lg:min-h-screen lg:border-b-0 lg:border-r lg:border-white/8 ${
-        collapsed ? "lg:w-[72px]" : "lg:w-[260px]"
+        collapsed ? "lg:w-[76px]" : "lg:w-[300px]"
       }`}
     >
       {/* ── Logo 標題列 ─────────────────────────────────────────── */}
@@ -76,9 +76,9 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
       </div>
 
       {/* ── 導航列表 ─────────────────────────────────────────────── */}
-      <nav className={`flex flex-1 flex-col gap-1 overflow-y-auto overflow-x-hidden px-2.5 py-2.5 ${collapsed ? "items-center" : ""}`}>
+      <nav className={`flex flex-1 flex-col gap-1 overflow-y-auto overflow-x-hidden px-3 py-3 ${collapsed ? "items-center" : ""}`}>
         {!collapsed && (
-          <p className="mb-1 px-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-600">
+          <p className="mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-600">
             Navigation
           </p>
         )}
@@ -92,8 +92,8 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
               aria-label={label}
               className={`group flex items-center rounded-xl transition-all duration-150 ${
                 collapsed
-                  ? "h-11 w-11 justify-center"
-                  : "gap-3 px-3 py-2.5"
+                  ? "h-12 w-12 justify-center"
+                  : "gap-3 px-3 py-3"
               } ${
                 isActive
                   ? "bg-accent-500/12 text-white ring-1 ring-accent-400/20"
@@ -102,20 +102,20 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
             >
               {/* icon */}
               <div className={`flex shrink-0 items-center justify-center rounded-lg transition-colors ${
-                collapsed ? "h-8 w-8" : "h-8 w-8"
+                collapsed ? "h-9 w-9" : "h-9 w-9"
               } ${
                 isActive
                   ? "bg-accent-500/20 text-accent-300"
                   : "text-slate-400 group-hover:text-slate-200"
               }`}>
-                <Icon className="h-4 w-4" />
+                <Icon className="h-4.5 w-4.5" />
               </div>
 
               {!collapsed && (
                 <>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-[13px] font-semibold leading-tight">{label}</p>
-                    <p className="mt-0.5 truncate text-[11px] leading-tight text-slate-500 group-hover:text-slate-400">
+                    <p className="truncate text-sm font-semibold leading-tight">{label}</p>
+                    <p className="mt-0.5 truncate text-xs leading-tight text-slate-500 group-hover:text-slate-400">
                       {sublabel}
                     </p>
                   </div>
@@ -134,7 +134,7 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
       </nav>
 
       {/* ── Runtime 狀態面板 ─────────────────────────────────────── */}
-      <div className={`shrink-0 border-t border-white/8 px-2.5 py-2.5 ${collapsed ? "" : ""}`}>
+      <div className={`shrink-0 border-t border-white/8 px-3 py-3 ${collapsed ? "" : ""}`}>
         {!collapsed && (
           <div className="mb-2 flex items-center justify-between px-1">
             <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-600">Runtime</p>
@@ -152,16 +152,16 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
               title={collapsed ? `${label} · ${meta}` : undefined}
               className={`flex items-center rounded-lg border border-white/6 bg-white/[0.025] ${
                 collapsed
-                  ? "h-10 w-11 justify-center"
-                  : "gap-2.5 px-3 py-2"
+                  ? "h-11 w-12 justify-center"
+                  : "gap-3 px-3 py-2.5"
               }`}
             >
               {collapsed ? (
                 <Icon className="h-4 w-4 text-slate-400" />
               ) : (
                 <>
-                  <Icon className="h-3.5 w-3.5 shrink-0 text-slate-400" />
-                  <span className="min-w-0 flex-1 truncate text-[11px] text-slate-400">{label}</span>
+                  <Icon className="h-4 w-4 shrink-0 text-slate-400" />
+                  <span className="min-w-0 flex-1 truncate text-xs text-slate-400">{label}</span>
                   <div className="flex items-center gap-1">
                     <div className={`h-1.5 w-1.5 shrink-0 rounded-full ${STATUS_DOT[tone] ?? STATUS_DOT.ok}`} />
                   </div>
