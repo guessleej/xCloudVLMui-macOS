@@ -38,14 +38,14 @@ function StatCard({
   icon: ElementType;
 }) {
   return (
-    <div className="metric-card px-4 py-3">
-      <div className="flex items-start justify-between gap-4">
+    <div className="metric-card px-3 py-2.5">
+      <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-[0.22em] text-slate-500">{title}</p>
-          <p className="mt-1.5 font-display text-2xl font-semibold text-white">{value}</p>
-          <p className="mt-1 text-[11px] leading-4 text-slate-400">{detail}</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-500">{title}</p>
+          <p className="mt-1 font-display text-3xl font-semibold text-white">{value}</p>
+          <p className="mt-0.5 text-xs leading-4 text-slate-400">{detail}</p>
         </div>
-        <div className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/10 bg-slate-950/35">
+        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-slate-950/35">
           <Icon className="h-3.5 w-3.5 text-accent-200" />
         </div>
       </div>
@@ -204,15 +204,15 @@ export default function DashboardPage() {
         onCreateAlert={handleCreateAlert}
         onResolve={handleResolveAlert}
       />
-      <section className="panel-grid overflow-hidden rounded-[32px] p-4">
-        <div className="relative z-10 grid gap-4 xl:grid-cols-[1.35fr_0.9fr]">
+      <section className="panel-grid overflow-hidden rounded-2xl p-4">
+        <div className="relative z-10 grid gap-3 xl:grid-cols-[1.35fr_0.9fr]">
           <div>
-            <div className="flex items-center gap-2.5 mb-4">
+            <div className="flex items-center gap-2.5 mb-3">
               <div className="section-kicker">Operations Snapshot</div>
-              <h2 className="text-sm font-semibold text-white">製造設備維護戰情中心</h2>
+              <h2 className="text-base font-bold text-white">製造設備維護戰情中心</h2>
             </div>
 
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2">
               <span className="signal-chip">
                 <Cpu className="h-3.5 w-3.5 text-accent-300" />
                 NVIDIA Jetson Series
@@ -399,10 +399,10 @@ function MetricBlock({
   detail: string;
 }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.04] p-3">
-      <p className="text-xs uppercase tracking-[0.22em] text-slate-500">{label}</p>
-      <p className="mt-1 font-display text-xl font-semibold text-white">{value}</p>
-      <p className="mt-1 text-[11px] leading-4 text-slate-400">{detail}</p>
+    <div className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5">
+      <p className="text-[11px] uppercase tracking-[0.18em] text-slate-500">{label}</p>
+      <p className="mt-1 font-display text-2xl font-semibold text-white">{value}</p>
+      <p className="mt-0.5 text-xs leading-4 text-slate-400">{detail}</p>
     </div>
   );
 }
