@@ -54,7 +54,7 @@ export default function TopNav({
     : "XC";
 
   return (
-    <header className="relative z-10 flex h-14 shrink-0 items-center border-b border-white/8 bg-surface/70 px-3 backdrop-blur-xl sm:px-4 lg:px-5">
+    <header className="relative z-10 flex h-16 shrink-0 items-center border-b border-white/8 bg-surface/70 px-3 backdrop-blur-xl sm:px-4 lg:px-5">
       {/* ── 左側：側欄切換 + 頁面標題 ───────────────────────────── */}
       <div className="flex items-center gap-2 min-w-0">
         <button

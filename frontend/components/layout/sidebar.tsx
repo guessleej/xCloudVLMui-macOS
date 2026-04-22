@@ -36,28 +36,28 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
   return (
     <aside
       className={`relative z-10 flex flex-col border-b border-white/8 bg-surface/80 backdrop-blur-xl transition-[width] duration-300 lg:min-h-screen lg:border-b-0 lg:border-r lg:border-white/8 ${
-        collapsed ? "lg:w-[76px]" : "lg:w-[300px]"
+        collapsed ? "lg:w-[84px]" : "lg:w-[320px]"
       }`}
     >
       {/* ── Logo 標題列 ─────────────────────────────────────────── */}
-      <div className={`flex h-14 shrink-0 items-center border-b border-white/8 ${collapsed ? "justify-center px-2" : "justify-between px-4"}`}>
+      <div className={`flex h-16 shrink-0 items-center border-b border-white/8 ${collapsed ? "justify-center px-2" : "justify-between px-5"}`}>
         {!collapsed && (
           <div className="flex items-center gap-3 min-w-0">
             {/* X logo mark */}
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-brand-400/30 bg-brand-500/15">
-              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-brand-400/30 bg-brand-500/15">
+              <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6">
                 <path d="M19.5 4.5L4.5 19.5" stroke="rgba(255,255,255,0.3)" strokeWidth="5" strokeLinecap="round" />
                 <path d="M4.5 4.5L12 12" stroke="white" strokeWidth="5" strokeLinecap="round" />
                 <path d="M12 12L19.5 19.5" stroke="white" strokeWidth="5" strokeLinecap="round" />
               </svg>
             </div>
-            <span className="text-base font-bold text-white tracking-tight">xCloud<span className="text-brand-300">VLM</span></span>
+            <span className="text-lg font-bold text-white tracking-tight">xCloud<span className="text-brand-300">VLM</span></span>
           </div>
         )}
 
         {collapsed && (
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-brand-400/30 bg-brand-500/15">
-            <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-400/30 bg-brand-500/15">
+            <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6">
               <path d="M19.5 4.5L4.5 19.5" stroke="rgba(255,255,255,0.3)" strokeWidth="5" strokeLinecap="round" />
               <path d="M4.5 4.5L12 12" stroke="white" strokeWidth="5" strokeLinecap="round" />
               <path d="M12 12L19.5 19.5" stroke="white" strokeWidth="5" strokeLinecap="round" />
@@ -68,17 +68,17 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
         <button
           type="button"
           onClick={onToggle}
-          className={`hidden h-7 w-7 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-white/[0.06] hover:text-slate-300 lg:flex ${collapsed ? "absolute -right-3.5 top-3 border border-white/10 bg-surface/90 backdrop-blur-sm" : ""}`}
+          className={`hidden h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-white/[0.06] hover:text-slate-300 lg:flex ${collapsed ? "absolute -right-4 top-4 border border-white/10 bg-surface/90 backdrop-blur-sm" : ""}`}
           title={collapsed ? "展開側欄" : "收合側欄"}
         >
-          {collapsed ? <PanelLeftOpen className="h-3.5 w-3.5" /> : <PanelLeftClose className="h-3.5 w-3.5" />}
+          {collapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
         </button>
       </div>
 
       {/* ── 導航列表 ─────────────────────────────────────────────── */}
       <nav className={`flex flex-1 flex-col gap-1 overflow-y-auto overflow-x-hidden px-3 py-3 ${collapsed ? "items-center" : ""}`}>
         {!collapsed && (
-          <p className="mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-600">
+          <p className="mb-2 px-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-600">
             Navigation
           </p>
         )}
@@ -92,7 +92,7 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
               aria-label={label}
               className={`group flex items-center rounded-xl transition-all duration-150 ${
                 collapsed
-                  ? "h-12 w-12 justify-center"
+                  ? "h-13 w-13 justify-center p-1.5"
                   : "gap-3 px-3 py-3"
               } ${
                 isActive
@@ -100,15 +100,13 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
                   : "text-slate-400 hover:bg-white/[0.04] hover:text-slate-200"
               }`}
             >
-              {/* icon */}
-              <div className={`flex shrink-0 items-center justify-center rounded-lg transition-colors ${
-                collapsed ? "h-9 w-9" : "h-9 w-9"
-              } ${
+              {/* icon — 與 logo 容器同尺寸 h-10 w-10 */}
+              <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-colors ${
                 isActive
                   ? "bg-accent-500/20 text-accent-300"
                   : "text-slate-400 group-hover:text-slate-200"
               }`}>
-                <Icon className="h-4.5 w-4.5" />
+                <Icon className="h-5 w-5" />
               </div>
 
               {!collapsed && (
@@ -134,7 +132,7 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
       </nav>
 
       {/* ── Runtime 狀態面板 ─────────────────────────────────────── */}
-      <div className={`shrink-0 border-t border-white/8 px-3 py-3 ${collapsed ? "" : ""}`}>
+      <div className="shrink-0 border-t border-white/8 px-3 py-3">
         {!collapsed && (
           <div className="mb-2 flex items-center justify-between px-1">
             <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-600">Runtime</p>
@@ -150,21 +148,19 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
             <div
               key={label}
               title={collapsed ? `${label} · ${meta}` : undefined}
-              className={`flex items-center rounded-lg border border-white/6 bg-white/[0.025] ${
+              className={`flex items-center rounded-xl border border-white/6 bg-white/[0.025] ${
                 collapsed
-                  ? "h-11 w-12 justify-center"
+                  ? "h-11 w-11 justify-center"
                   : "gap-3 px-3 py-2.5"
               }`}
             >
               {collapsed ? (
-                <Icon className="h-4 w-4 text-slate-400" />
+                <Icon className="h-4.5 w-4.5 text-slate-400" />
               ) : (
                 <>
                   <Icon className="h-4 w-4 shrink-0 text-slate-400" />
                   <span className="min-w-0 flex-1 truncate text-xs text-slate-400">{label}</span>
-                  <div className="flex items-center gap-1">
-                    <div className={`h-1.5 w-1.5 shrink-0 rounded-full ${STATUS_DOT[tone] ?? STATUS_DOT.ok}`} />
-                  </div>
+                  <div className={`h-2 w-2 shrink-0 rounded-full ${STATUS_DOT[tone] ?? STATUS_DOT.ok}`} />
                 </>
               )}
             </div>
