@@ -72,37 +72,37 @@ export default function TopNav({
         <div className="hidden h-3.5 w-px bg-white/10 lg:block" />
 
         {/* eyebrow badge */}
-        <span className="hidden shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-slate-500 sm:block">
+        <span className="hidden shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 sm:block">
           {meta.eyebrow}
         </span>
-        <span className="hidden text-[10px] text-slate-700 sm:block">/</span>
+        <span className="hidden text-xs text-slate-600 sm:block">/</span>
 
         {/* page title */}
-        <h1 className="truncate text-sm font-semibold text-white">{meta.title}</h1>
+        <h1 className="truncate text-base font-bold text-white">{meta.title}</h1>
       </div>
 
       {/* ── 中間彈性空白 ─────────────────────────────────────────── */}
       <div className="flex-1" />
 
       {/* ── 右側：狀態徽章 + 用戶 ────────────────────────────────── */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2.5">
         {/* 狀態晶片 */}
-        <div className="hidden items-center gap-1.5 sm:flex">
-          <span className="flex items-center gap-1 rounded-full border border-white/8 bg-white/[0.035] px-2 py-0.5 text-[10px] font-medium text-slate-400">
-            <Wifi className="h-2.5 w-2.5 text-emerald-400" />
+        <div className="hidden items-center gap-2 sm:flex">
+          <span className="flex items-center gap-1.5 rounded-full border border-white/8 bg-white/[0.035] px-2.5 py-1 text-xs font-medium text-slate-400">
+            <Wifi className="h-3 w-3 text-emerald-400" />
             Offline
           </span>
-          <span className="flex items-center gap-1 rounded-full border border-white/8 bg-white/[0.035] px-2 py-0.5 text-[10px] font-medium text-slate-400">
-            <Sparkles className="h-2.5 w-2.5 text-brand-300" />
+          <span className="flex items-center gap-1.5 rounded-full border border-white/8 bg-white/[0.035] px-2.5 py-1 text-xs font-medium text-slate-400">
+            <Sparkles className="h-3 w-3 text-brand-300" />
             Edge AI
           </span>
-          <span className="flex items-center gap-1 rounded-full border border-white/8 bg-white/[0.035] px-2 py-0.5 text-[10px] font-medium text-slate-400">
-            <Clock3 className="h-2.5 w-2.5 text-accent-300" />
+          <span className="flex items-center gap-1.5 rounded-full border border-white/8 bg-white/[0.035] px-2.5 py-1 text-xs font-medium text-slate-400">
+            <Clock3 className="h-3 w-3 text-accent-300" />
             {now}
           </span>
         </div>
 
-        <div className="h-3.5 w-px bg-white/10" />
+        <div className="h-4 w-px bg-white/10" />
 
         {/* 用戶 */}
         {user?.image ? (
@@ -110,23 +110,23 @@ export default function TopNav({
           <img
             src={user.image}
             alt={user.name ?? "user"}
-            className="h-6 w-6 rounded-lg border border-white/10 object-cover"
+            className="h-7 w-7 rounded-lg border border-white/10 object-cover"
           />
         ) : (
-          <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-brand-400/25 bg-brand-500/12 text-[9px] font-bold text-white">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-brand-400/25 bg-brand-500/12 text-[10px] font-bold text-white">
             {initials}
           </div>
         )}
-        <span className="hidden max-w-[96px] truncate text-xs font-medium text-slate-300 md:block">
+        <span className="hidden max-w-[120px] truncate text-sm font-medium text-slate-300 md:block">
           {user?.name ?? "操作員"}
         </span>
 
         <button
           onClick={() => signOut({ callbackUrl: "/auth/login" })}
           title="登出"
-          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-white/[0.06] hover:text-slate-300"
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-white/[0.06] hover:text-slate-300"
         >
-          <LogOut className="h-3.5 w-3.5" />
+          <LogOut className="h-4 w-4" />
         </button>
       </div>
     </header>
