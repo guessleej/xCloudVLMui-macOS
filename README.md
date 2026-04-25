@@ -27,7 +27,7 @@
 | **macOS** ← 本倉庫 | [xCloudVLMui](https://github.com/guessleej/xCloudVLMui) | `:3110` | ARM64 / x86 | Ollama (Apple Silicon) |
 | **AIR-030 JetPack 6.0** | [xCloudVLMui-air030](https://github.com/guessleej/xCloudVLMui-air030) | `:8880` | ARM64 | CUDA 12.2 / TensorRT |
 | **MIC-743 JetPack 7.1** | [xCloudVLMui-mic743](https://github.com/guessleej/xCloudVLMui-mic743) | `:8780` | ARM64 | CUDA 12.6 / TensorRT |
-| **NVIDIA DGX** | [xCloudVLMui-dgx](https://github.com/guessleej/xCloudVLMui-dgx) | `:8480` | AMD64 / ARM64 | CUDA 12.6 / NVLink / Ollama |
+| **NVIDIA DGX** | [xCloudVLMui-dgx](https://github.com/guessleej/xCloudVLMui-dgx) | `:8480` | ARM64 | CUDA 12.6 / NVLink / Ollama |
 | **x86-64 通用** | [xCloudVLMui-x86](https://github.com/guessleej/xCloudVLMui-x86) | `:8680` | AMD64 | CPU / 可選 NVIDIA GPU |
 
 ---
