@@ -5,8 +5,11 @@ import {
   AlertTriangle,
   BookOpenText,
   CheckCircle2,
+  CheckSquare,
+  ChevronDown,
   Clock,
   Database,
+  Download,
   Edit2,
   FileImage,
   FileText,
@@ -18,6 +21,7 @@ import {
   ScanLine,
   Search,
   Settings2,
+  Square,
   Trash2,
   Upload,
   X,
@@ -131,10 +135,16 @@ function HistoryCard({
   item,
   onDelete,
   onEditNotes,
+  selectionMode,
+  isSelected,
+  onToggleSelect,
 }: {
-  item:         ChatHistoryItem;
-  onDelete:     (id: string) => void;
-  onEditNotes:  (id: string, notes: string) => void;
+  item:           ChatHistoryItem;
+  onDelete:       (id: string) => void;
+  onEditNotes:    (id: string, notes: string) => void;
+  selectionMode?: boolean;
+  isSelected?:    boolean;
+  onToggleSelect?: (id: string) => void;
 }) {
   const [editingNotes, setEditingNotes] = useState(false);
   const [notesValue,   setNotesValue]   = useState(item.notes ?? "");
@@ -156,31 +166,51 @@ function HistoryCard({
   };
 
   return (
-    <div className="rounded-xl border border-white/8 bg-white/[0.03] p-3 transition-colors hover:border-white/12">
+    <div
+      onClick={selectionMode ? () => onToggleSelect?.(item.id) : undefined}
+      className={`rounded-xl border p-3 transition-colors ${
+        selectionMode ? "cursor-pointer" : ""
+      } ${
+        isSelected
+          ? "border-brand-500/40 bg-brand-500/10"
+          : "border-white/8 bg-white/[0.03] hover:border-white/12"
+      }`}
+    >
       {/* 問題 */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-2.5 min-w-0">
-          <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg bg-brand-500/20">
-            <MessageSquare className="h-3.5 w-3.5 text-brand-300" />
-          </div>
+          {selectionMode ? (
+            <div className="mt-0.5 flex-shrink-0 text-brand-400">
+              {isSelected
+                ? <CheckSquare className="h-5 w-5" />
+                : <Square className="h-5 w-5 text-slate-500" />
+              }
+            </div>
+          ) : (
+            <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-lg bg-brand-500/20">
+              <MessageSquare className="h-3.5 w-3.5 text-brand-300" />
+            </div>
+          )}
           <p className="text-sm font-semibold text-white leading-5">{item.question}</p>
         </div>
-        <div className="flex flex-shrink-0 items-center gap-1">
-          <button
-            onClick={() => { setEditingNotes(true); setTimeout(() => textRef.current?.focus(), 50); }}
-            className="ghost-button h-7 w-7 rounded-xl px-0 text-slate-500 hover:text-brand-300"
-            title="編輯備註"
-          >
-            <Edit2 className="h-3.5 w-3.5" />
-          </button>
-          <button
-            onClick={() => onDelete(item.id)}
-            className="ghost-button h-7 w-7 rounded-xl px-0 text-slate-500 hover:text-red-400"
-            title="刪除"
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-          </button>
-        </div>
+        {!selectionMode && (
+          <div className="flex flex-shrink-0 items-center gap-1">
+            <button
+              onClick={() => { setEditingNotes(true); setTimeout(() => textRef.current?.focus(), 50); }}
+              className="ghost-button h-7 w-7 rounded-xl px-0 text-slate-500 hover:text-brand-300"
+              title="編輯備註"
+            >
+              <Edit2 className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={() => onDelete(item.id)}
+              className="ghost-button h-7 w-7 rounded-xl px-0 text-slate-500 hover:text-red-400"
+              title="刪除"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* 回答摘要 */}
@@ -265,6 +295,9 @@ export default function KnowledgePage() {
   const [historyLoading, setHistoryLoading] = useState(false);
   const [historyOffset, setHistoryOffset] = useState(0);
   const [historySearch, setHistorySearch] = useState("");
+  const [selectedIds,   setSelectedIds]   = useState<Set<string>>(new Set());
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [exportMenuOpen, setExportMenuOpen] = useState(false);
   const HISTORY_LIMIT = 20;
 
   const IMAGE_EXTS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp"];
@@ -344,6 +377,141 @@ export default function KnowledgePage() {
       prev.map((h) => h.id === id ? { ...h, notes: notes || undefined } : h)
     );
   };
+
+  /* ── 批次刪除選取項目 ── */
+  const handleBatchDelete = async () => {
+    if (selectedIds.size === 0) return;
+    if (!window.confirm(`確定要刪除選取的 ${selectedIds.size} 筆記錄嗎？`)) return;
+    const ids = Array.from(selectedIds);
+    let success = 0;
+    for (const id of ids) {
+      try { await chatHistoryApi.delete(id); success++; } catch { /* skip */ }
+    }
+    setHistoryItems((prev) => prev.filter((h) => !selectedIds.has(h.id)));
+    setHistoryTotal((v) => v - success);
+    setSelectedIds(new Set());
+    setSelectionMode(false);
+    toast.success(`已刪除 ${success} 筆記錄`);
+  };
+
+  /* ── 切換單筆選取 ── */
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  /* ── 全選 / 取消全選 ── */
+  const toggleSelectAll = () => {
+    if (selectedIds.size === historyItems.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(historyItems.map((h) => h.id)));
+    }
+  };
+
+  /* ── 匯出工具函式 ── */
+  const buildExportItems = () =>
+    selectionMode && selectedIds.size > 0
+      ? historyItems.filter((h) => selectedIds.has(h.id))
+      : historyItems;
+
+  const handleExportMd = () => {
+    const items = buildExportItems();
+    const lines: string[] = [
+      `# 問答歷史記錄`,
+      ``,
+      `> 匯出時間：${new Date().toLocaleString("zh-TW")}　共 ${items.length} 筆`,
+      ``,
+      `---`,
+      ``,
+    ];
+    items.forEach((item, i) => {
+      lines.push(`## 第 ${i + 1} 筆　${new Date(item.created_at).toLocaleString("zh-TW")}`);
+      if (item.latency_ms) lines.push(`_推論耗時：${item.latency_ms} ms_`);
+      lines.push(``, `**問題**`, ``, item.question, ``, `**回答**`, ``);
+      lines.push(item.answer, ``);
+      if (item.sources?.length) {
+        lines.push(`**來源文件**`, ``);
+        item.sources.forEach((s: any) =>
+          lines.push(`- ${s.filename ?? "未知"}${s.score ? `（相似度 ${(s.score * 100).toFixed(1)}%）` : ""}`)
+        );
+        lines.push(``);
+      }
+      if (item.notes) lines.push(`**備註：** ${item.notes}`, ``);
+      lines.push(`---`, ``);
+    });
+    const blob = new Blob([lines.join("\n")], { type: "text/markdown;charset=utf-8" });
+    const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: `問答歷史_${Date.now()}.md` });
+    a.click(); URL.revokeObjectURL(a.href);
+    toast.success("Markdown 已下載");
+    setExportMenuOpen(false);
+  };
+
+  const handleExportPdf = () => {
+    const items = buildExportItems();
+    const rows = items.map((item, i) => `
+      <div class="item">
+        <h2>${i + 1}. ${escHtml(item.question)}</h2>
+        <div class="meta">${new Date(item.created_at).toLocaleString("zh-TW")}${item.latency_ms ? `　${item.latency_ms} ms` : ""}</div>
+        <div class="answer">${escHtml(item.answer).replace(/\n/g, "<br>")}</div>
+        ${item.sources?.length ? `<div class="sources">📚 來源：${(item.sources as any[]).map((s: any) => s.filename ?? "").join("、")}</div>` : ""}
+        ${item.notes ? `<div class="notes">📝 ${escHtml(item.notes)}</div>` : ""}
+      </div>`).join("");
+    const html = `<!DOCTYPE html><html lang="zh-TW"><head><meta charset="utf-8"><title>問答歷史</title>
+      <style>
+        body{font-family:"Microsoft JhengHei","PingFang TC",sans-serif;max-width:800px;margin:0 auto;padding:24px;color:#111;}
+        h1{color:#1d4ed8;border-bottom:2px solid #1d4ed8;padding-bottom:8px;}
+        h2{color:#1e40af;font-size:15px;margin-top:24px;}
+        .meta{color:#6b7280;font-size:12px;margin-bottom:8px;}
+        .answer{background:#f8fafc;border-left:3px solid #3b82f6;padding:10px 12px;white-space:pre-wrap;font-size:13px;line-height:1.6;}
+        .sources{margin-top:6px;font-size:12px;color:#059669;}
+        .notes{margin-top:6px;font-size:12px;color:#7c3aed;background:#faf5ff;padding:6px 10px;border-radius:4px;}
+        .item{page-break-inside:avoid;border-bottom:1px solid #e5e7eb;padding-bottom:16px;}
+        @media print{body{padding:0;}h1{font-size:18px;}}
+      </style></head>
+      <body><h1>問答歷史記錄</h1>
+      <p style="color:#6b7280;font-size:13px">匯出時間：${new Date().toLocaleString("zh-TW")}　共 ${items.length} 筆</p>
+      ${rows}</body></html>`;
+    const win = window.open("", "_blank", "width=900,height=700");
+    if (!win) { toast.error("請允許彈出視窗以列印 PDF"); return; }
+    win.document.write(html);
+    win.document.close();
+    win.focus();
+    setTimeout(() => { win.print(); }, 600);
+    setExportMenuOpen(false);
+  };
+
+  const handleExportWord = () => {
+    const items = buildExportItems();
+    const rows = items.map((item, i) => `
+      <h2>${i + 1}. ${escHtml(item.question)}</h2>
+      <p style="color:#6b7280;font-size:12px">${new Date(item.created_at).toLocaleString("zh-TW")}${item.latency_ms ? `　${item.latency_ms} ms` : ""}</p>
+      <div style="background:#eff6ff;border-left:3px solid #3b82f6;padding:8px 12px;margin:8px 0">
+        ${escHtml(item.answer).replace(/\n/g, "<br>")}
+      </div>
+      ${item.sources?.length ? `<p style="color:#059669;font-size:12px">📚 來源：${(item.sources as any[]).map((s: any) => s.filename ?? "").join("、")}</p>` : ""}
+      ${item.notes ? `<p style="color:#7c3aed;font-size:12px">📝 ${escHtml(item.notes)}</p>` : ""}
+      <hr/>`).join("");
+    const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+      <head><meta charset='utf-8'><title>問答歷史</title>
+      <style>body{font-family:"Microsoft JhengHei",Arial;} h1{color:#1d4ed8;} h2{color:#1e40af;font-size:14pt;margin-top:18pt;}</style>
+      </head><body>
+      <h1>問答歷史記錄</h1>
+      <p style="color:#6b7280">匯出時間：${new Date().toLocaleString("zh-TW")}　共 ${items.length} 筆</p>
+      ${rows}</body></html>`;
+    const blob = new Blob(["﻿", html], { type: "application/msword;charset=utf-8" });
+    const a = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: `問答歷史_${Date.now()}.doc` });
+    a.click(); URL.revokeObjectURL(a.href);
+    toast.success("Word 文件已下載");
+    setExportMenuOpen(false);
+  };
+
+  function escHtml(s: string) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
 
   /* ── 文件刪除 ── */
   const handleDelete = async (id: string) => {
@@ -552,31 +720,100 @@ export default function KnowledgePage() {
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               {/* 搜尋 */}
-              <form onSubmit={handleSearchHistory} className="flex items-center gap-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500 pointer-events-none" />
-                  <input
-                    value={historySearch}
-                    onChange={(e) => setHistorySearch(e.target.value)}
-                    placeholder="搜尋問題…"
-                    className="h-9 w-48 rounded-xl border border-white/10 bg-white/[0.04] pl-8 pr-3 text-xs text-white placeholder-slate-600 focus:border-brand-500/40 focus:outline-none"
-                  />
-                </div>
-                <button type="submit" className="secondary-button h-9 text-xs px-3">
-                  搜尋
-                </button>
-              </form>
+              {!selectionMode && (
+                <form onSubmit={handleSearchHistory} className="flex items-center gap-1">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-500 pointer-events-none" />
+                    <input
+                      value={historySearch}
+                      onChange={(e) => setHistorySearch(e.target.value)}
+                      placeholder="搜尋問題…"
+                      className="h-9 w-48 rounded-xl border border-white/10 bg-white/[0.04] pl-8 pr-3 text-xs text-white placeholder-slate-600 focus:border-brand-500/40 focus:outline-none"
+                    />
+                  </div>
+                  <button type="submit" className="secondary-button h-9 text-xs px-3">
+                    搜尋
+                  </button>
+                </form>
+              )}
               {/* 重新整理 */}
-              <button
-                onClick={() => loadHistory(0, historySearch)}
-                disabled={historyLoading}
-                className="ghost-button h-9 w-9 rounded-xl px-0"
-                title="重新整理"
-              >
-                <RefreshCw className={`h-4 w-4 ${historyLoading ? "animate-spin" : ""}`} />
-              </button>
-              {/* 清空 */}
+              {!selectionMode && (
+                <button
+                  onClick={() => loadHistory(0, historySearch)}
+                  disabled={historyLoading}
+                  className="ghost-button h-9 w-9 rounded-xl px-0"
+                  title="重新整理"
+                >
+                  <RefreshCw className={`h-4 w-4 ${historyLoading ? "animate-spin" : ""}`} />
+                </button>
+              )}
+
+              {/* 批次選取模式切換 */}
               {historyItems.length > 0 && (
+                <button
+                  onClick={() => {
+                    setSelectionMode((v) => !v);
+                    setSelectedIds(new Set());
+                    setExportMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-1.5 h-9 rounded-xl px-3 text-xs font-semibold transition-colors ${
+                    selectionMode
+                      ? "bg-brand-600/30 border border-brand-500/40 text-brand-300"
+                      : "ghost-button text-slate-400 hover:text-white"
+                  }`}
+                >
+                  <CheckSquare className="h-3.5 w-3.5" />
+                  {selectionMode ? "取消選取" : "批次選取"}
+                </button>
+              )}
+
+              {/* 匯出下拉 */}
+              {historyItems.length > 0 && (
+                <div className="relative">
+                  <button
+                    onClick={() => setExportMenuOpen((v) => !v)}
+                    className="flex items-center gap-1.5 h-9 rounded-xl px-3 text-xs ghost-button text-slate-400 hover:text-white"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    匯出
+                    <ChevronDown className={`h-3 w-3 transition-transform ${exportMenuOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  {exportMenuOpen && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setExportMenuOpen(false)} />
+                      <div className="absolute right-0 top-full z-50 mt-1 w-44 rounded-xl border border-white/12 bg-slate-900 shadow-xl py-1">
+                      <p className="px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] text-slate-600">
+                        {selectionMode && selectedIds.size > 0 ? `選取 ${selectedIds.size} 筆` : `全部 ${historyItems.length} 筆`}
+                      </p>
+                      <button
+                        onClick={handleExportMd}
+                        className="flex w-full items-center gap-2 px-3 py-2 text-xs text-slate-300 hover:bg-white/[0.06] hover:text-white"
+                      >
+                        <FileText className="h-3.5 w-3.5 text-brand-300" />
+                        匯出 Markdown
+                      </button>
+                      <button
+                        onClick={handleExportPdf}
+                        className="flex w-full items-center gap-2 px-3 py-2 text-xs text-slate-300 hover:bg-white/[0.06] hover:text-white"
+                      >
+                        <FileText className="h-3.5 w-3.5 text-red-300" />
+                        匯出 PDF（列印）
+                      </button>
+                      <button
+                        onClick={handleExportWord}
+                        className="flex w-full items-center gap-2 px-3 py-2 text-xs text-slate-300 hover:bg-white/[0.06] hover:text-white"
+                      >
+                        <FileText className="h-3.5 w-3.5 text-blue-300" />
+                        匯出 Word (.doc)
+                      </button>
+                    </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* 清空 */}
+              {historyItems.length > 0 && !selectionMode && (
                 <button
                   onClick={handleClearAllHistory}
                   className="ghost-button h-9 rounded-xl px-3 text-xs text-slate-500 hover:text-red-400"
@@ -587,6 +824,39 @@ export default function KnowledgePage() {
               )}
             </div>
           </div>
+
+          {/* 批次操作列 */}
+          {selectionMode && (
+            <div className="mt-3 flex items-center justify-between rounded-xl border border-brand-500/30 bg-brand-500/10 px-3 py-2">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={toggleSelectAll}
+                  className="flex items-center gap-1.5 text-xs text-brand-300 hover:text-brand-200 font-semibold"
+                >
+                  {selectedIds.size === historyItems.length
+                    ? <CheckSquare className="h-4 w-4" />
+                    : <Square className="h-4 w-4" />
+                  }
+                  {selectedIds.size === historyItems.length ? "取消全選" : "全選"}
+                </button>
+                <span className="text-xs text-slate-400">
+                  已選 <span className="font-semibold text-brand-300">{selectedIds.size}</span> / {historyItems.length} 筆
+                </span>
+              </div>
+              <button
+                onClick={handleBatchDelete}
+                disabled={selectedIds.size === 0}
+                className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  selectedIds.size > 0
+                    ? "bg-red-500/20 border border-red-500/30 text-red-300 hover:bg-red-500/30"
+                    : "opacity-40 cursor-not-allowed text-slate-500"
+                }`}
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                刪除選取（{selectedIds.size}）
+              </button>
+            </div>
+          )}
 
           {/* 歷史列表 */}
           <div className="mt-2 space-y-3 overflow-y-auto" style={{ maxHeight: "65vh" }}>
@@ -611,6 +881,9 @@ export default function KnowledgePage() {
                     item={item}
                     onDelete={handleDeleteHistory}
                     onEditNotes={handleEditNotes}
+                    selectionMode={selectionMode}
+                    isSelected={selectedIds.has(item.id)}
+                    onToggleSelect={toggleSelect}
                   />
                 ))}
                 {/* 載入更多 */}

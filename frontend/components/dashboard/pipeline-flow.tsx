@@ -71,12 +71,12 @@ function StageCard({ stage, index }: { stage: PipelineStage; index: number }) {
   const cardBg     = isOnline ? meta.onlineBg : "bg-white/[0.025]";
 
   return (
-    <div className={`relative overflow-hidden rounded-xl border ${cardBorder} ${cardBg} p-3 transition-all duration-500`}>
+    <div className={`relative overflow-hidden rounded-[24px] border ${cardBorder} ${cardBg} p-4 transition-all duration-500`}>
       {/* Step number + status dot */}
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <div className={`flex h-8 w-8 items-center justify-center rounded-xl border border-white/8 bg-slate-950/40 ${isOnline ? meta.onlineColor : "text-slate-500"}`}>
-            <Icon className="h-3.5 w-3.5" />
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className={`flex h-11 w-11 items-center justify-center rounded-2xl border border-white/8 bg-slate-950/40 ${isOnline ? meta.onlineColor : "text-slate-500"}`}>
+            <Icon className="h-5 w-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -107,9 +107,9 @@ function StageCard({ stage, index }: { stage: PipelineStage; index: number }) {
       </div>
 
       {/* Metrics grid */}
-      <div className="mt-2 grid grid-cols-2 gap-1.5">
+      <div className="mt-4 grid grid-cols-2 gap-2">
         {Object.entries(stage.metrics).map(([k, v]) => (
-          <div key={k} className="rounded-lg border border-white/6 bg-slate-950/30 px-2.5 py-2">
+          <div key={k} className="rounded-[16px] border border-white/6 bg-slate-950/30 px-3 py-2.5">
             <p className="text-[10px] uppercase tracking-[0.18em] text-slate-600">{k}</p>
             <p className={`mt-1 text-xs font-medium leading-4 ${isOnline ? "text-slate-200" : "text-slate-500"}`}>
               {v}
@@ -119,7 +119,7 @@ function StageCard({ stage, index }: { stage: PipelineStage; index: number }) {
       </div>
 
       {/* Last checked */}
-      <p className="mt-2 text-right text-[10px] text-slate-600">
+      <p className="mt-3 text-right text-[10px] text-slate-600">
         更新於 {new Date(stage.checked_at).toLocaleTimeString("zh-TW", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
       </p>
     </div>
@@ -158,13 +158,13 @@ export default function PipelineFlow() {
   const OverallIcon = overallCfg.icon;
 
   return (
-    <div className="panel-soft rounded-2xl p-3 sm:p-4">
+    <div className="panel-soft rounded-[30px] p-5 sm:p-6">
       {/* Header */}
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-4">
         <div>
           <div className="section-kicker">System Flow</div>
-          <h2 className="mt-1.5 text-sm font-semibold text-white">資料流與輸出節奏</h2>
-          <p className="mt-1 text-[11px] leading-4 text-slate-400">
+          <h2 className="mt-3 text-2xl font-semibold text-white">資料流與輸出節奏</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-400">
             依照巡檢架構圖，將整體任務拆成四段式即時管線，每 30 秒自動刷新。
           </p>
         </div>
@@ -189,19 +189,19 @@ export default function PipelineFlow() {
 
       {/* Error state */}
       {error && !status && (
-        <div className="mt-3 rounded-xl border border-amber-400/20 bg-amber-400/8 px-3 py-3">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-amber-300" />
-            <p className="text-xs text-amber-200">{error}</p>
+        <div className="mt-6 rounded-[22px] border border-amber-400/20 bg-amber-400/8 px-5 py-4">
+          <div className="flex items-center gap-3">
+            <AlertTriangle className="h-5 w-5 shrink-0 text-amber-300" />
+            <p className="text-sm text-amber-200">{error}</p>
           </div>
-          <p className="mt-1 text-[11px] text-slate-400">
+          <p className="mt-2 text-xs text-slate-400">
             顯示靜態管線架構，連線後將自動切換為即時狀態。
           </p>
         </div>
       )}
 
       {/* Pipeline stages */}
-      <div className="mt-3 space-y-2">
+      <div className="mt-6 space-y-4">
         {status ? (
           status.stages.map((stage, i) => (
             <StageCard key={stage.key} stage={stage} index={i} />
@@ -209,18 +209,18 @@ export default function PipelineFlow() {
         ) : (
           /* Skeleton fallback（後端未就緒時顯示靜態架構）*/
           FALLBACK_STAGES.map((s, i) => (
-            <div key={s.key} className="relative overflow-hidden rounded-xl border border-white/8 bg-white/[0.035] p-3">
-              <div className="flex items-start gap-3">
-                <div className="flex h-8 w-8 animate-pulse items-center justify-center rounded-xl border border-white/8 bg-slate-800/60">
-                  <s.icon className="h-3.5 w-3.5 text-slate-600" />
+            <div key={s.key} className="relative overflow-hidden rounded-[24px] border border-white/8 bg-white/[0.035] p-4">
+              <div className="flex items-start gap-4">
+                <div className="flex h-11 w-11 animate-pulse items-center justify-center rounded-2xl border border-white/8 bg-slate-800/60">
+                  <s.icon className="h-5 w-5 text-slate-600" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <span className="table-chip">0{i + 1}</span>
-                    <p className="text-xs font-semibold text-white">{s.label}</p>
+                    <p className="text-sm font-semibold text-white">{s.label}</p>
                   </div>
-                  <p className="mt-0.5 text-[11px] text-slate-500">{s.detail}</p>
-                  <div className="mt-2 h-1.5 w-3/4 animate-pulse rounded-full bg-slate-800" />
+                  <p className="mt-1 text-xs text-slate-500">{s.detail}</p>
+                  <div className="mt-3 h-2 w-3/4 animate-pulse rounded-full bg-slate-800" />
                 </div>
               </div>
             </div>
@@ -230,7 +230,7 @@ export default function PipelineFlow() {
 
       {/* Last checked timestamp */}
       {status && (
-        <p className="mt-2 text-right text-[10px] text-slate-600">
+        <p className="mt-4 text-right text-[11px] text-slate-600">
           最後檢測：{new Date(status.checked_at).toLocaleString("zh-TW", {
             month: "2-digit", day: "2-digit",
             hour: "2-digit",  minute: "2-digit", second: "2-digit",

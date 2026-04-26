@@ -27,6 +27,7 @@ import {
   Loader2,
   Plus,
   RefreshCw,
+  Settings2,
   Shield,
   Trash2,
   X,
@@ -35,6 +36,7 @@ import {
 import toast from "react-hot-toast";
 import { modelsApi } from "@/lib/api";
 import type { TrainedModel, YoloTaskType } from "@/types";
+import { InferenceConfigPanel } from "@/components/models/inference-config-panel";
 
 /* ═══════════════════════════════════════════════════════════════════
    常數與工具函式
@@ -101,11 +103,15 @@ function ModelCard({
   onActivate,
   onEdit,
   onDelete,
+  onConfig,
+  isConfigActive,
 }: {
-  model:      TrainedModel;
-  onActivate: (id: string) => void;
-  onEdit:     (model: TrainedModel) => void;
-  onDelete:   (id: string, name: string) => void;
+  model:          TrainedModel;
+  onActivate:     (id: string) => void;
+  onEdit:         (model: TrainedModel) => void;
+  onDelete:       (id: string, name: string) => void;
+  onConfig:       (model: TrainedModel) => void;
+  isConfigActive: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const meta = TASK_META[model.task_type] ?? TASK_META.detect;
@@ -167,6 +173,18 @@ function ModelCard({
             </button>
           )}
           <button
+            onClick={() => onConfig(model)}
+            title="推論參數設定"
+            className={`ghost-button h-8 rounded-[12px] px-2 text-xs font-semibold transition-colors ${
+              isConfigActive
+                ? "bg-brand-500/20 text-brand-300"
+                : "text-slate-500 hover:text-brand-300"
+            }`}
+          >
+            <Settings2 className="h-3.5 w-3.5" />
+            <span className="hidden sm:inline ml-1">推論參數</span>
+          </button>
+          <button
             onClick={() => onEdit(model)}
             className="ghost-button h-8 w-8 rounded-[12px] px-0 text-slate-500 hover:text-brand-300"
             title="編輯"
@@ -191,9 +209,18 @@ function ModelCard({
         </div>
       </div>
 
-      {/* ── 輸出格式條 ── */}
-      <div className="mt-2 rounded-xl border border-white/6 bg-slate-950/40 px-4 py-2">
-        <p className="font-mono text-[11px] text-slate-400">{meta.outputDesc}</p>
+      {/* ── 輸出格式條 + 推論參數摘要 ── */}
+      <div className="mt-2 flex flex-wrap items-center gap-2 rounded-xl border border-white/6 bg-slate-950/40 px-4 py-2">
+        <p className="font-mono text-[11px] text-slate-400 flex-1">{meta.outputDesc}</p>
+        {model.inference_config && (
+          <div className="flex items-center gap-1.5 text-[10px] text-slate-500">
+            <Settings2 className="h-3 w-3 text-brand-400/60" />
+            <span>conf={model.inference_config.conf?.toFixed(2)}</span>
+            <span>·</span>
+            <span>imgsz={model.inference_config.imgsz}</span>
+            {model.inference_config.half && <span className="text-amber-400/70">· FP16</span>}
+          </div>
+        )}
       </div>
 
       {/* ── 效能指標 ── */}
@@ -594,6 +621,7 @@ export default function ModelsPage() {
   const [filterTask, setFilterTask] = useState<"all" | YoloTaskType>("all");
   const [showModal, setShowModal] = useState(false);
   const [editTarget, setEditTarget] = useState<TrainedModel | null>(null);
+  const [configTarget, setConfigTarget] = useState<TrainedModel | null>(null);
 
   /* ── 載入模型列表 ── */
   const load = useCallback(async () => {
@@ -799,54 +827,75 @@ export default function ModelsPage() {
           </div>
         </div>
 
-        {/* ── 模型列表（按任務分組）── */}
-        {loading && models.length === 0 ? (
-          <div className="flex items-center justify-center py-24">
-            <RefreshCw className="h-7 w-7 animate-spin text-slate-500" />
-          </div>
-        ) : Object.keys(grouped).length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-white/8 py-24 text-center">
-            <Cpu className="h-8 w-8 text-slate-600" />
-            <p className="mt-2 text-sm text-slate-500">尚無符合條件的模型。</p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {TASK_ORDER.filter((t) => grouped[t]).map((task) => {
-              const meta = TASK_META[task];
-              return (
-                <section key={task}>
-                  {/* 任務分組標題 */}
-                  <div className="mb-2 flex items-center gap-3">
-                    <div className={`h-px flex-1 ${meta.bg} border-t ${meta.border}`} />
-                    <div className={`flex items-center gap-2 rounded-full border px-4 py-1.5 ${meta.border} ${meta.bg}`}>
-                      <Cpu className={`h-3.5 w-3.5 ${meta.color}`} />
-                      <span className={`text-xs font-semibold ${meta.color}`}>
-                        {meta.label} · {meta.labelEn}
-                      </span>
-                      <span className="text-[11px] text-slate-500">
-                        {grouped[task].length} 個模型
-                      </span>
-                    </div>
-                    <div className={`h-px flex-1 ${meta.bg} border-t ${meta.border}`} />
-                  </div>
+        {/* ── 主區：模型列表 + 推論參數面板 ── */}
+        <div className={`gap-3 ${configTarget ? "grid xl:grid-cols-[1fr_360px]" : ""}`}>
 
-                  {/* 模型卡片 */}
-                  <div className="space-y-3">
-                    {grouped[task].map((m) => (
-                      <ModelCard
-                        key={m.id}
-                        model={m}
-                        onActivate={handleActivate}
-                        onEdit={(target) => { setEditTarget(target); setShowModal(true); }}
-                        onDelete={handleDelete}
-                      />
-                    ))}
-                  </div>
-                </section>
-              );
-            })}
+          {/* 左側：模型列表 */}
+          <div>
+            {loading && models.length === 0 ? (
+              <div className="flex items-center justify-center py-24">
+                <RefreshCw className="h-7 w-7 animate-spin text-slate-500" />
+              </div>
+            ) : Object.keys(grouped).length === 0 ? (
+              <div className="flex flex-col items-center justify-center rounded-2xl border border-white/8 py-24 text-center">
+                <Cpu className="h-8 w-8 text-slate-600" />
+                <p className="mt-2 text-sm text-slate-500">尚無符合條件的模型。</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {TASK_ORDER.filter((t) => grouped[t]).map((task) => {
+                  const meta = TASK_META[task];
+                  return (
+                    <section key={task}>
+                      <div className="mb-2 flex items-center gap-3">
+                        <div className={`h-px flex-1 ${meta.bg} border-t ${meta.border}`} />
+                        <div className={`flex items-center gap-2 rounded-full border px-4 py-1.5 ${meta.border} ${meta.bg}`}>
+                          <Cpu className={`h-3.5 w-3.5 ${meta.color}`} />
+                          <span className={`text-xs font-semibold ${meta.color}`}>
+                            {meta.label} · {meta.labelEn}
+                          </span>
+                          <span className="text-[11px] text-slate-500">
+                            {grouped[task].length} 個模型
+                          </span>
+                        </div>
+                        <div className={`h-px flex-1 ${meta.bg} border-t ${meta.border}`} />
+                      </div>
+                      <div className="space-y-3">
+                        {grouped[task].map((m) => (
+                          <ModelCard
+                            key={m.id}
+                            model={m}
+                            onActivate={handleActivate}
+                            onEdit={(target) => { setEditTarget(target); setShowModal(true); }}
+                            onDelete={handleDelete}
+                            onConfig={(target) => setConfigTarget((prev) => prev?.id === target.id ? null : target)}
+                            isConfigActive={configTarget?.id === m.id}
+                          />
+                        ))}
+                      </div>
+                    </section>
+                  );
+                })}
+              </div>
+            )}
           </div>
-        )}
+
+          {/* 右側：推論參數面板（sticky） */}
+          {configTarget && (
+            <div className="xl:sticky xl:top-4">
+              <div className="panel-soft h-[calc(100vh-180px)] min-h-[600px] overflow-hidden rounded-2xl border border-brand-400/20">
+                <InferenceConfigPanel
+                  model={configTarget}
+                  onClose={() => setConfigTarget(null)}
+                  onSaved={(updated) => {
+                    setModels((prev) => prev.map((m) => m.id === updated.id ? updated : m));
+                    setConfigTarget(updated);
+                  }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
